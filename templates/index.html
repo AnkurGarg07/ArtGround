@@ -1,0 +1,14 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+<h1 class="text-5xl">Test</h1>
+</body>
+</html>
