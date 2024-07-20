@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<h1 class="text-5xl">Test branch</h1>
-{{ request.user.customer.phone_number }}
+<h1 class="text-5xl">Test branch seller</h1>
+{{ request.user.seller.full_name }}
 <form action={% url 'logout' %}>
     {% csrf_token %}
     <button>logout</button>
