@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% tailwind_css %}
+</head>
+<body>
+<div class="main min-h-screen bg-custom-bg bg-cover bg-center">
+     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      
+      <div class="w-full bg-primary rounded-[25px] shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
+          
+          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <a href="#" class="flex items-center justify-center ">
+          <img class=" h-8 mr-2" src="{% static 'images/logo.png' %}" alt="logo">
+      </a>
+              <h1 class="text-xl font-bold leading-tight tracking-tight text-text md:text-2xl text-center m-0">
+                  Login as <span class="text-accent">{{ heading }}</span>
+              </h1>
+              <form class="space-y-4 md:space-y-6" method="POST" {% if heading == 'Seller' %}{% url 'login_seller' %}{% else %}{% url 'login_customer' %}{% endif %}>
+              {% csrf_token %}
+                  <div>
+                      {% render_field form.email class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1] " placeholder="Email" %}
+                  </div>
+                  <div>
+                      {% render_field form.password class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1] " placeholder="Password" %}
+                  </div>
+                 <div class="flex items-center justify-between">
+                      <div class="flex items-start">
+                          <div class="flex items-center h-5">
+                            <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-secondary " >
+                          </div>
+                          <div class="ml-3 text-sm">
+                            <label for="remember" class="text-secondary">Remember me</label>
+                          </div>
+                      </div>
+                      <a href="" class="text-sm font-medium text-secondary hover:underline ">Forgot password?</a>
+                  </div>
+                  <button type="submit" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[25px] text-md px-5 py-2.5 text-center bg-opacity-70 ">Login</button>
+                  <p class="text-sm text-center text-text">
+                      Don’t have an account? 
+                      <a href="{% if heading == 'Seller' %} {% url 'register_seller' %} {% else %}{% url 'register_customer' %}{% endif %}" class="font-medium text-primary-600 hover:underline text-accent  ">SignUp</a>
+                  </p>
+              <p class="text-sm text-center text-text">
+                      Login as {% if heading == 'Seller' %} Customer {% else %} Seller {% endif %} ?
+                     <a href="{% if heading == 'Seller' %} {% url 'login_customer' %} {% else %}{% url 'login_seller' %}{% endif %}" class="font-medium text-primary-600 hover:underline text-accent  ">Login</a>
+                  </p>
+              {% if messages %}
+                        <div class="errors">
+                            {% for message in messages %}
+                                <p class="error">{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+</body>
+</html>
