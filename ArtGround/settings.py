@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'widget_tweaks',
     'Account',
+    'Seller'
 ]
 TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
@@ -59,7 +60,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ArtGround.urls'
-
 
 TEMPLATES = [
     {
@@ -137,3 +137,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = '/account/login/customer'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

@@ -10,7 +10,7 @@ def customer_required(view_func):
             return view_func(request, *args, **kwargs)
         elif request.user.is_authenticated:
             # Redirect authenticated sellers to their home page
-            return redirect('seller')
+            return redirect('sellerHome')
         return redirect('login_customer')
 
     return _wrapped_view
@@ -34,6 +34,6 @@ def redirect_if_logged_in(view_func):
             if request.user.is_customer:
                 return redirect('index')  # Replace with your actual customer home page URL name
             elif request.user.is_seller:
-                return redirect('seller')  # Replace with your actual seller home page URL name
+                return redirect('sellerHome')  # Replace with your actual seller home page URL name
         return view_func(request, *args, **kwargs)
     return _wrapped_view

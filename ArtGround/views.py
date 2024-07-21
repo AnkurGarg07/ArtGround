@@ -7,7 +7,7 @@ from Account.decorators import customer_required, seller_required
 
 @login_required()
 @customer_required
-def index(request):
+def home(request):
     best_products = [
         {
             id: 1,
@@ -119,10 +119,34 @@ def index(request):
         },
     ]
 
-    return render(request, 'Customer/index.html', {'best_products': best_products, 'all_products': all_products})
+    return render(request, 'Customer/home.html', {'best_products': best_products, 'all_products': all_products})
 
 
 @login_required()
-@seller_required
-def sellers(request):
-    return render(request, 'Seller/sellerIndex.html')
+@customer_required
+def about(request):
+    return render(request, 'Customer/about.html')
+
+
+@login_required()
+@customer_required
+def category(request):
+    return render(request, 'Customer/category.html')
+
+
+@login_required()
+@customer_required
+def cart(request):
+    return render(request, 'Customer/cart.html')
+
+
+@login_required()
+@customer_required
+def checkout(request):
+    return render(request, 'Customer/checkout.html')
+
+
+@login_required()
+@customer_required
+def orderConfirmation(request):
+    return render(request, 'Customer/orderConfirm.html')

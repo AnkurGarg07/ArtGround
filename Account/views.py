@@ -30,9 +30,9 @@ def register(request, user_type):
 
                 login(request, user, backend='Account.backends.EmailBackend')  # Use Django's login method
                 if user.is_customer:
-                    return redirect('index')
+                    return redirect('home')
                 elif user.is_seller:
-                    return redirect('seller')
+                    return redirect('sellerHome')
             else:
                 messages.error(request, 'Profile form is invalid. Please correct the errors below.')
         else:
@@ -89,9 +89,9 @@ def login_view(request, user_type):
                 if (user_type == 'seller' and user.is_seller) or (user_type == 'customer' and user.is_customer):
                     login(request, user)
                     if user.is_customer:
-                        return redirect('index')  # Replace with actual URL name
+                        return redirect('home')  # Replace with actual URL name
                     elif user.is_seller:
-                        return redirect('seller')  # Replace with actual URL name
+                        return redirect('sellerHome')  # Replace with actual URL name
                 else:
                     # User type mismatch
                     messages.error(request, 'Invalid credentials for this login page.')

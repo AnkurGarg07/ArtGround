@@ -1128,48 +1128,8 @@ select {
   background-color: rgb(173 185 209 / var(--tw-bg-opacity));
 }
 
-.bg-\[url\] {
-  background-color: url;
-}
-
 .bg-opacity-70 {
   --tw-bg-opacity: 0.7;
-}
-
-.bg-\[url\(\.\.\/\.\.\/static\/assets\/hero-section-bg\.png\)\] {
-  background-image: url(../../static/assets/hero-section-bg.png);
-}
-
-.bg-\[url\(\.\.\/\.\.\/static\/assets\/hero-section-bg\.p\)\] {
-  background-image: url(../../static/assets/hero-section-bg.p);
-}
-
-.bg-\[url\(\.\.\/\.\.\/static\/assets\/hero-section-bg\)\] {
-  background-image: url(../../static/assets/hero-section-bg);
-}
-
-.bg-\[url\(\.\.\/\.\.\/static\/asset\)\] {
-  background-image: url(../../static/asset);
-}
-
-.bg-\[url\(\.\.\/\.\.\/st\)\] {
-  background-image: url(../../st);
-}
-
-.bg-\[url\(\.\.\/\.\.\)\] {
-  background-image: url(../..);
-}
-
-.bg-\[url\(\.\.\)\] {
-  background-image: url(..);
-}
-
-.bg-\[url\(\)\] {
-  background-image: url();
-}
-
-.bg-\[url\(\{\}\)\] {
-  background-image: url({});
 }
 
 .bg-cover {
