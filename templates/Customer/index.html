@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     
     <!-- Hero -->
     <div
-      class="bg-[url(../../static/assets/hero-section-bg.png)] bg-center bg-cover flex w-full h-[340px] mt-[30px] rounded-[30px]"
+      class="bg-[url({% static 'assets/hero-section-bg.png' %})] bg-center bg-cover flex w-full h-[340px] mt-[30px] rounded-[30px]"
     >
       <div class="mt-auto ml-[40px] mb-[40px]">
         <span class="flex flex-col text-[40px] leading-snug">
