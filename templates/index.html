@@ -1,19 +1,140 @@
-{% load static %}
-{% load static tailwind_tags %}
+{% load static %} {% load static tailwind_tags %} {% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          // colors: {
+          //   primary: "#FFFBFC",
+          //   secondary: "#ADB9D1",
+          //   accent: "#4A68A9",
+          //   text: "#32384A",
+          //   product: "#ECEDEF",
+          // },
+          extend: {
+            colors: {
+              primary: "#FFFBFC",
+              secondary: "#ADB9D1",
+              accent: "#4A68A9",
+              text: "#32384A",
+              product: "#ECEDEF",
+            },
+          },
+        },
+      };
+    </script>
+    <meta charset="UTF-8" />
+    <title>ArtGround - Digital Auction</title>
     {% tailwind_css %}
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body>
-<h1 class="text-5xl">Test branch</h1>
-{{ request.user.customer.phone_number }}
-<form action={% url 'logout' %}>
-    {% csrf_token %}
-    <button>logout</button>
-</form>
-</body>
+    <link rel="stylesheet" href="../static/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="../static/assets/search-icon.svg"
+      type="image/svg+xml"
+    />
+  </head>
+  <body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
+    <!-- Navbar -->
+    {% include 'Components/navbar.html' %}
+
+    <!-- Hero -->
+    <div
+      class="bg-[url(../../static/assets/hero-section-bg.png)] bg-center bg-cover flex w-full h-[340px] mt-[30px] rounded-[30px]"
+    >
+      <div class="mt-auto ml-[40px] mb-[40px]">
+        <span class="flex flex-col text-[40px] leading-snug">
+          <span class="text-text font-semibold">Your Digital</span>
+          <span class="text-accent font-bold">Auction Platform</span>
+        </span>
+        <span
+          class="flex bg-primary h-[60px] w-[150%] rounded-lg mt-6 items-center px-4"
+        >
+          <img src="../static/assets/search-icon.svg" alt="" class="size-8" />
+          <span class="w-[1px] bg-secondary h-[60%] mx-[10px]"></span>
+          <input
+            type="text"
+            placeholder="Search for your favourite artworks"
+            class="search-input"
+          />
+        </span>
+      </div>
+    </div>
+    <!-- Best Sellers -->
+    <div class="mt-[30px]">
+      <h1 class="font-bold text-[24px] text-text text-center">Best Sellers</h1>
+      <div class="flex gap-4 my-6 pb-4">
+        {% for item in best_products %}
+        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
+          <img src="{{item.image}}" alt="" class="rounded-[20px] size-[250px]" />
+          <div class="flex justify-between mt-2">
+            <div class="flex flex-col">
+              <span class="text-text font-semibold text-[18px]"
+                >{{item.title}}</span
+              >
+              <span class="text-secondary text-[12px]">{{item.owner}}</span>
+            </div>
+            <div class="text-accent font-semibold flex items-top">
+              <span class="text-[12px] mr-[1px]">₹</span>
+              <span class="text-[18px] font-bold">{{item.price}}</span>
+              <span class="text-[12px] ml-[1px]">00</span>
+            </div>
+          </div>
+          <div class="flex gap-2 w-full mt-4">
+            <button class="w-full bg-accent rounded-full text-primary">
+              Add to cart
+            </button>
+            <button class="bg-secondary p-2 rounded-full">
+              <img
+                src="../static/assets/heart.svg"
+                alt=""
+                class="mix-blend-overlay"
+              />
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <h1 class="font-bold text-[24px] text-text border-t-2 border-secondary border-opacity-70 text-center pt-6">More Products</h1>
+      <div class="grid grid-cols-5 gap-4 my-6 pb-4">
+        {% for item in all_products %}
+        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
+          <img src="{{item.image}}" alt="" class="" />
+          <div class="flex justify-between mt-2">
+            <div class="flex flex-col">
+              <span class="text-text font-semibold text-[18px]"
+                >{{item.title}}</span
+              >
+              <span class="text-secondary text-[12px]">{{item.owner}}</span>
+            </div>
+            <div class="text-accent font-semibold flex items-top">
+              <span class="text-[12px] mr-[1px]">₹</span>
+              <span class="text-[18px] font-bold">{{item.price}}</span>
+              <span class="text-[12px] ml-[1px]">00</span>
+            </div>
+          </div>
+          <div class="flex gap-2 w-full mt-4">
+            <button class="w-full bg-accent rounded-full text-primary">
+              Add to cart
+            </button>
+            <button class="bg-secondary p-2 rounded-full">
+              <img
+                src="../static/assets/heart.svg"
+                alt=""
+                class="mix-blend-overlay"
+              />
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
 </html>

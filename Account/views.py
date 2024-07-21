@@ -7,6 +7,7 @@ from .decorators import redirect_if_logged_in
 from .forms import RegistrationForm, CustomerProfileForm, SellerProfileForm, CustomLoginForm
 from .models import Seller, Customer, User
 
+
 @redirect_if_logged_in
 def register(request, user_type):
     profile_form = None
@@ -55,21 +56,26 @@ def register(request, user_type):
         'heading': heading
     })
 
+
 @redirect_if_logged_in
 def register_seller(request):
     return register(request, 'seller')
+
 
 @redirect_if_logged_in
 def register_customer(request):
     return register(request, 'customer')
 
+
 @redirect_if_logged_in
 def login_seller(request):
     return login_view(request, 'seller')
 
+
 @redirect_if_logged_in
 def login_customer(request):
     return login_view(request, 'customer')
+
 
 @redirect_if_logged_in
 def login_view(request, user_type):
@@ -104,3 +110,9 @@ def logout_view(request):
     user = request.user
     logout(request)
     return redirect('login_customer')
+
+
+def logout_to_seller(request):
+    user = request.user
+    logout(request)
+    return redirect('login_seller')

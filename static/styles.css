@@ -1,5 +1,52 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+:root {
+  --primary: "#FFFBFC";
+  --secondary: "#ADB9D1";
+  --accent: "#4A68A9";
+  --text: "#32384A";
+  --product: "#ECEDEF";
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ecedef;
+  border-radius: 20px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a68a9;
+  border-radius: 20px !important;
+}
+
+/* ::-webkit-scrollbar-thumb:hover {
+  background: #6a98f0;
+} */
+
+.search-input {
+  width: 100%;
+  /* padding: 10px; */
+  background-color: var(--primary);
+  border: none;
+  outline: none !important;
+  /* margin-bottom: 10px; */
+  color: #adb9d1 !important;
+  --tw-ring-color: none !important;
+}
+
+::placeholder {
+  color: #adb9d1 !important;
+}
+
+.search-input:focus {
+  outline: 0px;
 }
