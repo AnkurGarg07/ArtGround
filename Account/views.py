@@ -9,7 +9,7 @@ from .models import Seller, Customer, User
 
 @redirect_if_logged_in
 def register(request, user_type):
-
+    profile_form = None
     if request.method == "POST":
         user_form = RegistrationForm(request.POST)
         if user_form.is_valid():
@@ -35,7 +35,7 @@ def register(request, user_type):
             else:
                 messages.error(request, 'Profile form is invalid. Please correct the errors below.')
         else:
-            messages.error(request, 'User form is invalid. Please correct the errors below.')
+            messages.error(request, 'Email id already registered.')
             # If user_form is invalid, reinitialize the profile_form
             if user_type == 'customer':
                 profile_form = CustomerProfileForm()

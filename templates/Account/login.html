@@ -20,6 +20,13 @@
               <h1 class="text-xl font-bold leading-tight tracking-tight text-text md:text-2xl text-center m-0">
                   Login as <span class="text-accent">{{ heading }}</span>
               </h1>
+          {% if messages %}
+                        <div class="errors">
+                            {% for message in messages %}
+                                <p class="text-[#ff0000] text-center">{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
               <form class="space-y-4 md:space-y-6" method="POST" {% if heading == 'Seller' %}{% url 'login_seller' %}{% else %}{% url 'login_customer' %}{% endif %}>
               {% csrf_token %}
                   <div>
@@ -48,13 +55,7 @@
                       Login as {% if heading == 'Seller' %} Customer {% else %} Seller {% endif %} ?
                      <a href="{% if heading == 'Seller' %} {% url 'login_customer' %} {% else %}{% url 'login_seller' %}{% endif %}" class="font-medium text-primary-600 hover:underline text-accent  ">Login</a>
                   </p>
-              {% if messages %}
-                        <div class="errors">
-                            {% for message in messages %}
-                                <p class="error">{{ message }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+              
               </form>
           </div>
       </div>
