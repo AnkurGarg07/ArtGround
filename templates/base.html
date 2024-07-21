@@ -1,0 +1,53 @@
+{% load static %} {% load static tailwind_tags %} {% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          // colors: {
+          //   primary: "#FFFBFC",
+          //   secondary: "#ADB9D1",
+          //   accent: "#4A68A9",
+          //   text: "#32384A",
+          //   product: "#ECEDEF",
+          // },
+          extend: {
+            colors: {
+              primary: "#FFFBFC",
+              secondary: "#ADB9D1",
+              accent: "#4A68A9",
+              text: "#32384A",
+              product: "#ECEDEF",
+            },
+          },
+        },
+      };
+    </script>
+    <meta charset="UTF-8" />
+    <title>ArtGround - Digital Auction</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="../static/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="../static/assets/search-icon.svg"
+      type="image/svg+xml"
+    />
+  </head>
+  <body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
+    <!-- Navbar -->
+    {% include 'Components/navbar.html' %}
+
+  {% block content %}
+  
+  {% endblock %}
+{% include 'Components/footer.html' %}
+</body>
+</html>

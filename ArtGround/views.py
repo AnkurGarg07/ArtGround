@@ -119,10 +119,10 @@ def index(request):
         },
     ]
 
-    return render(request, 'index.html', {'best_products': best_products, 'all_products': all_products})
+    return render(request, 'Customer/index.html', {'best_products': best_products, 'all_products': all_products})
 
 
 @login_required()
 @seller_required
 def sellers(request):
-    return render(request, 'sellerIndex.html')
+    return render(request, 'Seller/sellerIndex.html')

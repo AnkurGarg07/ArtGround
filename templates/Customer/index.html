@@ -1,50 +1,6 @@
-{% load static %} {% load static tailwind_tags %} {% csrf_token %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          // colors: {
-          //   primary: "#FFFBFC",
-          //   secondary: "#ADB9D1",
-          //   accent: "#4A68A9",
-          //   text: "#32384A",
-          //   product: "#ECEDEF",
-          // },
-          extend: {
-            colors: {
-              primary: "#FFFBFC",
-              secondary: "#ADB9D1",
-              accent: "#4A68A9",
-              text: "#32384A",
-              product: "#ECEDEF",
-            },
-          },
-        },
-      };
-    </script>
-    <meta charset="UTF-8" />
-    <title>ArtGround - Digital Auction</title>
-    {% tailwind_css %}
-    <link rel="stylesheet" href="../static/styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="icon"
-      href="../static/assets/search-icon.svg"
-      type="image/svg+xml"
-    />
-  </head>
-  <body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
-    <!-- Navbar -->
-    {% include 'Components/navbar.html' %}
-
+{% extends "base.html" %}
+{% block content %}
+    
     <!-- Hero -->
     <div
       class="bg-[url(../../static/assets/hero-section-bg.png)] bg-center bg-cover flex w-full h-[340px] mt-[30px] rounded-[30px]"
@@ -57,7 +13,7 @@
         <span
           class="flex bg-primary h-[60px] w-[150%] rounded-lg mt-6 items-center px-4"
         >
-          <img src="../static/assets/search-icon.svg" alt="" class="size-8" />
+          <img src="../../static/assets/search-icon.svg" alt="" class="size-8" />
           <span class="w-[1px] bg-secondary h-[60%] mx-[10px]"></span>
           <input
             type="text"
@@ -93,7 +49,7 @@
             </button>
             <button class="bg-secondary p-2 rounded-full">
               <img
-                src="../static/assets/heart.svg"
+                src="../../static/assets/heart.svg"
                 alt=""
                 class="mix-blend-overlay"
               />
@@ -126,7 +82,7 @@
             </button>
             <button class="bg-secondary p-2 rounded-full">
               <img
-                src="../static/assets/heart.svg"
+                src="../../static/assets/heart.svg"
                 alt=""
                 class="mix-blend-overlay"
               />
@@ -136,5 +92,4 @@
         {% endfor %}
       </div>
     </div>
-  </body>
-</html>
+{% endblock %}
