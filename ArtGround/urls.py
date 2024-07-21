@@ -27,7 +27,6 @@ urlpatterns = [
                   path('', views.home, name='home'),
                   path('about/', views.about, name='about'),
                   path('category/', views.category, name='category'),
-                  path('cart/', views.cart, name='cart'),
                   path('checkout/', views.checkout, name='checkout'),
                   path('orderConfirmation/', views.orderConfirmation, name='orderConfirmation'),
 

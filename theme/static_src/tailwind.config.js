@@ -50,6 +50,9 @@ module.exports = {
         text: "#32384A",
         product: "#ECEDEF",
       },
+      fontFamily:{
+      'Montserrat':["Montserrat", 'sans-serif' ]
+    }
     },
   },
   plugins: [
