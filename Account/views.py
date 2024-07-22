@@ -115,4 +115,4 @@ def logout_view(request):
 def logout_to_seller(request):
     user = request.user
     logout(request)
-    return redirect('login_seller')
+    return redirect('register_seller')

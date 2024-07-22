@@ -6,11 +6,11 @@
         <h1 class="font-bold text-[24px] text-text border-t-2 border-secondary border-opacity-70 text-center pt-3">{{ category | capfirst }} Paintings</h1>
       <div class="grid grid-cols-5 gap-4 my-4 pb-2">
         {% for painting in products %}
-        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
+        <div title="{{ painting.description }}" class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
           <img src="/media/{{ painting.image }}" alt="" class="" />
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
-              <span class="text-text font-semibold text-[18px]"
+              <span class="text-text font-semibold text-[18px]" 
                 >{{painting.name}}</span
               >
               <span class="text-secondary text-[12px]">{{painting.seller}}</span>
