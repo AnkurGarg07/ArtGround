@@ -68,7 +68,17 @@ def about(request):
 @login_required()
 @customer_required
 def category(request):
-    return render(request, 'Customer/category.html')
+    # fetching products according to category
+    oil_painting = Product.objects.filter(category='oil')
+    acrylic_painting = Product.objects.filter(category='acrylic')
+    water_painting = Product.objects.filter(category='water')
+    pastel_painting = Product.objects.filter(category='pastel')
+    spray_painting = Product.objects.filter(category='spray')
+    other = Product.objects.filter(category='other')
+    painting_category = {"oil": oil_painting, "acrylic": acrylic_painting, "water": water_painting,
+                         "pastel": pastel_painting, "spray": spray_painting, "other": other}
+
+    return render(request, 'Customer/category.html', {'painting_category': painting_category})
 
 
 @login_required()
