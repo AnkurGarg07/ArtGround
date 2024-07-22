@@ -59,6 +59,8 @@
         </div>
         {% endfor %}
       </div>
+    
+<!-- All products -->
       <h1 class="font-bold text-[24px] text-text border-t-2 border-secondary border-opacity-70 text-center pt-6">More Products</h1>
       <div class="grid grid-cols-5 gap-4 my-6 pb-4">
         {% for item in all_products %}
@@ -69,8 +71,10 @@
               <span class="text-text font-semibold text-[18px]"
                 >{{item.name}}</span
               >
-              <span class="text-secondary text-[12px]">{{item.owner}}</span>
+              <span class="text-secondary text-[12px]">{{item.seller}}</span>
+                <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
             </div>
+              
             <div class="text-accent font-semibold flex items-top">
               <span class="text-[12px] mr-[1px]">₹</span>
               <span class="text-[18px] font-bold">{{item.price}}</span>

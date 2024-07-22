@@ -11,12 +11,15 @@
     <ul
       class="flex justify-center items-center text-text gap-6 font-medium text-[16px]"
     >
-      <li>Home</li>
-      <li>Products</li>
-      <li>Categories</li>
-      <li>About</li>
-      <li class="bg-accent text-primary py-2 px-6 rounded-full">
-        <a href="{% url 'logout_seller' %}">Join as Seller</a>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'home' %}">Products</a></li>
+      <li><a href="{% url 'category' %}">Category</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li>
+        <a class="bg-accent text-primary py-2 px-6 rounded-full" href="{% url 'logout_seller' %}">Join as Seller</a>
+      </li>
+        <li>
+        <a class="bg-accent text-primary py-2 px-6 rounded-full" href="{% url 'logout' %}">Logout</a>
       </li>
       <li class="relative font-semibold">
         <span
