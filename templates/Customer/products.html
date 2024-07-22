@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	 <h1 class="font-bold text-[24px] text-text  text-center pt-6">All Products</h1>
+      <form>
+       <span
+          class="flex bg-primary h-[60px] w-[100%] rounded-lg mt-6 items-center pl-4 border-solid border-[1px]"
+        >
+          <img src="../../static/assets/search-icon.svg" alt="" class="size-8" />
+          <span class="w-[1px] bg-secondary h-[60%] mx-[10px]"></span>
+          <input
+            type="text"
+            placeholder="Search for your favourite artworks"
+            class="search-input"
+            name="query"
+          />
+           <span class="flex h-full  bg-accent rounded text-primary">
+              <button type="submit" class="px-[40px]">Search</button>
+          </span>
+        </span>
+          
+      </form>
+      <div class="grid grid-cols-5 gap-4 my-6 pb-4">
+        {% for item in all_products %}
+        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" title="{{ item.description }}">
+          <img src="/media/{{ item.image }}" alt="" class="" />
+          <div class="flex justify-between mt-2">
+            <div class="flex flex-col">
+              <span class="text-text font-semibold text-[18px]"
+                >{{item.name}}</span
+              >
+              <span class="text-secondary text-[12px]">{{item.seller}}</span>
+                <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
+            </div>
+              
+            <div class="text-accent font-semibold flex items-top">
+              <span class="text-[12px] mr-[1px]">₹</span>
+              <span class="text-[18px] font-bold">{{item.price}}</span>
+              <span class="text-[12px] ml-[1px]">00</span>
+            </div>
+          </div>
+          <div class="flex gap-2 w-full mt-4">
+            <button class="w-full bg-accent rounded-full text-primary">
+              Add to cart
+            </button>
+            <button class="bg-secondary p-2 rounded-full">
+              <img
+                src="../../static/assets/heart.svg"
+                alt=""
+                class="mix-blend-overlay"
+              />
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}

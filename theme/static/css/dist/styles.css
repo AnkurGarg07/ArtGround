@@ -1003,6 +1003,14 @@ select {
   width: 100%;
 }
 
+.w-\[80\%\] {
+  width: 80%;
+}
+
+.max-w-screen-xl {
+  max-width: 1280px;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }

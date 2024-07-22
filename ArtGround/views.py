@@ -48,6 +48,9 @@ def home(request):
     ]
 
     all_products = Product.objects.all()
+    query = request.GET.get('query')
+    if query:
+        all_products = Product.objects.filter(name__icontains=query)
     paginator = Paginator(all_products, 10)
     page_num = request.GET.get('page')
     if not page_num:
@@ -59,10 +62,12 @@ def home(request):
     return render(request, 'Customer/home.html', data)
 
 
-@login_required()
-@customer_required
-def about(request):
-    return render(request, 'Customer/about.html')
+def products(request):
+    products= Product.objects.all()
+    query=request.GET.get('query')
+    if query:
+        products= Product.objects.filter(name__icontains=query)
+    return render(request, 'Customer/products.html',{'all_products':products})
 
 
 @login_required()
@@ -79,6 +84,12 @@ def category(request):
                          "pastel": pastel_painting, "spray": spray_painting, "other": other}
 
     return render(request, 'Customer/category.html', {'painting_category': painting_category})
+
+
+@login_required()
+@customer_required
+def about(request):
+    return render(request, 'Customer/about.html')
 
 
 @login_required()
