@@ -1,10 +1,102 @@
+{% load static %} {% load static tailwind_tags %}
 <!DOCTYPE html>
+{% load widget_tweaks %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-form
-</body>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          // colors: {
+          //   primary: "#FFFBFC",
+          //   secondary: "#ADB9D1",
+          //   accent: "#4A68A9",
+          //   text: "#32384A",
+          //   product: "#ECEDEF",
+          // },
+          extend: {
+            colors: {
+              primary: "#FFFBFC",
+              secondary: "#ADB9D1",
+              accent: "#4A68A9",
+              text: "#32384A",
+              product: "#ECEDEF",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-primary w-[100vw] overflow-x-hidden">
+    <div class="grid grid-cols-[2fr_1fr] w-full h-[100vh]">
+      <div class="bg-product px-[60px] py-6">
+        <h1>Add Product</h1>
+        {% csrf_token %}
+        <form action="">
+          <div class="grid grid-cols-1">
+            <p>Product Name</p>
+            <!-- {% render_field product.name class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1] "} -->
+          </div>
+        </form>
+      </div>
+      <div class="bg-primary px-[60px] py-6 flex flex-col items-center gap-6">
+        <h1 class="font-semibold text-text">Upload Your Product Image</h1>
+        <div
+          class="bg-product p-4 w-[70%] h-[350px] rounded-2xl"
+          onclick="getProductImage()"
+        >
+          <img src="" alt="" id="product_image" />
+          <input
+            type="file"
+            accept=".png, .jpg, .jpeg"
+            name="product image"
+            id="product_image_picker"
+            onchange="readURL(this)"
+            hidden
+          />
+          <div
+            class="border-2 border-dashed border-secondary h-full rounded-xl flex flex-col justify-center items-center"
+          >
+            <img
+              src="{% static 'assets/upload-icon.png' %}"
+              alt=""
+              class="mix-blend-overlay size-[50px]"
+            />
+            <p class="text-secondary font-medium">Upload Image</p>
+            <p class="text-secondary text-sm">PNG, JPG, JPEG only</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let product_image_picker = document.getElementById(
+        "product_image_picker"
+      );
+      let product_image = document.getElementById("product_image");
+
+      function getProductImage() {
+        product_image_picker.click();
+        // product_image.src = URL.createObjectURL(product_image_picker.files[0]);
+      }
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            document.getElementById("product_image").src = e.target.result;
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
+  </body>
 </html>
