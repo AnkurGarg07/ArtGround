@@ -1,10 +1,27 @@
 <!DOCTYPE html>
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% tailwind_css %}
 </head>
 <body>
-form
+<div class="mainContainer font-Montserrat" >
+    <form class="min-h-screen flex">
+    <section class="w-[60%] bg-product">
+        <div class="formBox">
+           <h1 class="">Add product</h1>
+        </div>
+    </section>
+    <section class="w-[40%] bg-primary">
+        <div class="imageUploadBox">
+            <h1> Upload your product image</h1>
+            <input type="file"/>
+        </div>
+    </section>
+</form>
+</div>
 </body>
 </html>

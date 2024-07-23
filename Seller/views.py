@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from Account.decorators import seller_required
-
+from .forms import productForm
 
 # Create your views here.
 @login_required()
@@ -15,7 +15,7 @@ def sellerHome(request):
 @login_required()
 @seller_required
 def addProducts(request):
-
+    productForm = productForm()
     return render(request, 'productForm.html')
 
 
