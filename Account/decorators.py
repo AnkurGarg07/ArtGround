@@ -32,7 +32,7 @@ def redirect_if_logged_in(view_func):
     def _wrapped_view(request, *args, **kwargs):
         if request.user.is_authenticated:
             if request.user.is_customer:
-                return redirect('index')  # Replace with your actual customer home page URL name
+                return redirect('index')  # Replace with your actual Customer home page URL name
             elif request.user.is_seller:
                 return redirect('sellerHome')  # Replace with your actual seller home page URL name
         return view_func(request, *args, **kwargs)

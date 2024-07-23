@@ -15,7 +15,7 @@ def register(request, user_type):
         user_form = RegistrationForm(request.POST)
         if user_form.is_valid():
             user = user_form.save(commit=False)
-            if user_type == 'customer':
+            if user_type == 'Customer':
                 user.is_customer = True
                 profile_form = CustomerProfileForm(request.POST)
             elif user_type == 'seller':
@@ -38,19 +38,19 @@ def register(request, user_type):
         else:
             messages.error(request, 'Email id already registered.')
             # If user_form is invalid, reinitialize the profile_form
-            if user_type == 'customer':
+            if user_type == 'Customer':
                 profile_form = CustomerProfileForm()
             elif user_type == 'seller':
                 profile_form = SellerProfileForm()
     else:
         user_form = RegistrationForm()
-        if user_type == 'customer':
+        if user_type == 'Customer':
             profile_form = CustomerProfileForm()
         elif user_type == 'seller':
             profile_form = SellerProfileForm()
 
-    heading = 'Customer' if user_type == 'customer' else 'Seller'
-    return render(request, 'Account/register.html', {
+    heading = 'Customer' if user_type == 'Customer' else 'Seller'
+    return render(request, 'register.html', {
         'user_form': user_form,
         'profile_form': profile_form,
         'heading': heading
@@ -64,7 +64,7 @@ def register_seller(request):
 
 @redirect_if_logged_in
 def register_customer(request):
-    return register(request, 'customer')
+    return register(request, 'Customer')
 
 
 @redirect_if_logged_in
@@ -74,7 +74,7 @@ def login_seller(request):
 
 @redirect_if_logged_in
 def login_customer(request):
-    return login_view(request, 'customer')
+    return login_view(request, 'Customer')
 
 
 @redirect_if_logged_in
@@ -86,11 +86,14 @@ def login_view(request, user_type):
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password, backend='Account.backends.EmailBackend')
             if user is not None:
-                if (user_type == 'seller' and user.is_seller) or (user_type == 'customer' and user.is_customer):
+                if (user_type == 'seller' and user.is_seller) or (user_type == 'Customer' and user.is_customer):
                     login(request, user)
                     if user.is_customer:
+                        request.session['Customer'] = user.email
+                        request.session['cart'] = {}
                         return redirect('home')  # Replace with actual URL name
                     elif user.is_seller:
+                        request.session['seller'] = user.email
                         return redirect('sellerHome')  # Replace with actual URL name
                 else:
                     # User type mismatch
@@ -103,16 +106,20 @@ def login_view(request, user_type):
     else:
         form = CustomLoginForm()
     heading = 'Seller' if user_type == 'seller' else 'Customer'
-    return render(request, 'account/login.html', {'form': form, 'heading': heading})
+    return render(request, 'login.html', {'form': form, 'heading': heading})
 
 
 def logout_view(request):
+    if 'Customer' in request.session:
+        del request.session['Customer']
     user = request.user
     logout(request)
     return redirect('login_customer')
 
 
 def logout_to_seller(request):
+    if 'seller' in request.session:
+        del request.session['seller']
     user = request.user
     logout(request)
     return redirect('register_seller')

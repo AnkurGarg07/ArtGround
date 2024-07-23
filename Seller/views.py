@@ -8,23 +8,24 @@ from Account.decorators import seller_required
 @login_required()
 @seller_required
 def sellerHome(request):
-    return render(request, 'Seller/sellerHome.html')
+    print(request.session['seller'])
+    return render(request, 'sellerHome.html')
 
 
 @login_required()
 @seller_required
 def addProducts(request):
 
-    return render(request, 'Seller/productForm.html')
+    return render(request, 'productForm.html')
 
 
 @login_required()
 @seller_required
 def editProduct(request):
-    return render(request, 'Seller/productForm.html')
+    return render(request, 'productForm.html')
 
 
 @login_required()
 @seller_required
 def deleteProduct(request):
-    return render(request, 'Seller/sellerHome.html')
+    return render(request, 'sellerHome.html')

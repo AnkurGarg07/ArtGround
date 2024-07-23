@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='customer',
+            model_name='Customer',
             name='phone_number',
             field=models.CharField(max_length=10),
         ),

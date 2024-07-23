@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'widget_tweaks',
     'Account',
-    'Seller'
+    'Seller',
+    'Customer'
 ]
 TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
@@ -136,7 +137,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend
 ]
 
-LOGIN_URL = '/account/login/customer'
+LOGIN_URL = '/account/login/Customer'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

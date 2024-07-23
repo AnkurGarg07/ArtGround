@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='customer',
+            model_name='Customer',
             name='full_name',
             field=models.CharField(default='', max_length=100),
             preserve_default=False,

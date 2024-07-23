@@ -43,6 +43,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'custom-bg': "url('/static/images/background.png')",
+      },
+
       colors: {
         primary: "#FFFBFC",
         secondary: "#ADB9D1",
