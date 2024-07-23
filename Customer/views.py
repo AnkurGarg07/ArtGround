@@ -6,8 +6,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from Account.decorators import customer_required, seller_required
+from Customer.forms import shippingForm
 from Seller.models import Product
-
 
 @login_required()
 @customer_required
@@ -116,7 +116,7 @@ def products(request):
         products = Product.objects.all()
         query = request.GET.get('query')
         if query:
-           products = Product.objects.filter(name__icontains=query)
+            products = Product.objects.filter(name__icontains=query)
         return render(request, 'products.html', {'all_products': products})
 
 
@@ -154,7 +154,7 @@ def category(request):
         spray_painting = Product.objects.filter(category='spray')
         other = Product.objects.filter(category='other')
         painting_category = {"oil": oil_painting, "acrylic": acrylic_painting, "water": water_painting,
-                         "pastel": pastel_painting, "spray": spray_painting, "other": other}
+                             "pastel": pastel_painting, "spray": spray_painting, "other": other}
 
         return render(request, 'category.html', {'painting_category': painting_category})
 
@@ -168,7 +168,8 @@ def about(request):
 @login_required()
 @customer_required
 def checkout(request):
-    return render(request, 'checkout.html')
+    form = shippingForm()
+    return render(request, 'checkout.html', {'form': form})
 
 
 @login_required()
