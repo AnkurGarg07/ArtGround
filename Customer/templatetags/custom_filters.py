@@ -19,3 +19,8 @@ def cart_quantity(item, cart):
         if id == item.product_id:
             return cart.get(id)
     return 0
+
+
+@register.filter(name="cart_total")
+def cart_total(cart):
+    return sum(cart.values())
