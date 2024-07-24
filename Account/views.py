@@ -126,4 +126,4 @@ def logout_to_seller(request):
         del request.session['seller']
     user = request.user
     logout(request)
-    return redirect('register_seller')
+    return redirect('login_seller')

@@ -9,10 +9,17 @@
 </head>
 <body>
 <div class="mainContainer font-Montserrat" >
-    <form class="min-h-screen flex">
+    <form class="min-h-screen flex" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
     <section class="w-[60%] bg-product">
         <div class="formBox h-full px-[50px] pt-[50px]">
-           <h1 class="font-[700] text-[35px] text-text font-Montserrat">Add product</h1>
+           <h1 class="font-[700] text-[35px] text-text font-Montserrat">
+               {% if form.instance.pk %}
+               	Edit product
+               {% else %}
+                   Add product
+               {% endif %} 
+           </h1>
             <div class="flex flex-col py-[20px]">
                 <label for="name" class="px-2 font-[600]">Product name</label>
                 {% render_field form.name class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="name" placeholder="Enter product name" %}
@@ -36,13 +43,18 @@
                 {% render_field form.size class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="size" %}
             </div>
             <div class="flex flex-col mt-[20px]">
-                <button type="submit" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[10px] text-md px-5 py-3 text-center ">Add Product</button>
+                <button type="submit" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[10px] text-md px-5 py-3 text-center ">{% if form.instance.pk %}
+               	Update product
+               {% else %}
+                   Add product
+               {% endif %} </button>
             </div>
 
         </div>
     </section>
     <section class="w-[40%] bg-primary">
          <h1 class="font-semibold text-text">Upload Your Product Image</h1>
+        {% render_field form.image %}
         <div
           class="bg-product p-4 w-[70%] h-[350px] rounded-2xl"
           onclick="getProductImage()"

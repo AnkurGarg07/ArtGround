@@ -1,0 +1,50 @@
+{% load static %} {% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% tailwind_css %}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
+<body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
+{% include 'sellerNavbar.html' %}
+      <h1 class="font-bold text-[24px] text-text border-t-2 border-secondary border-opacity-70 text-center pt-6">Products Listed</h1>
+      <div class="grid grid-cols-5 gap-4 my-6 pb-4">
+        {% for item in products %}
+        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
+          <img src="/media/{{item.image}}" alt="" class="" />
+          <div class="flex justify-between mt-2">
+            <div class="flex flex-col">
+              <span class="text-text font-semibold text-[18px]"
+                >{{item.name}}</span
+              >
+              <span class="text-secondary text-[12px]">{{item.owner}}</span>
+                 <span class="text-secondary text-[12px]">{{item.seller}}</span>
+                <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
+            </div>
+            <div class="text-accent font-semibold flex items-top">
+              <span class="text-[12px] mr-[1px]">₹</span>
+              <span class="text-[18px] font-bold">{{item.price}}</span>
+            </div>
+          </div>
+          <div class="flex gap-2 w-full mt-4">
+            <a class="w-full bg-accent rounded-full text-primary py-2 text-center" href="{% url 'editProducts' item.product_id %}">
+              Edit
+            </a>
+              <form class="w-full bg-accent rounded-full text-primary py-2 text-center" action="{% url 'deleteProducts' item.product_id %}" method="POST">
+                  {% csrf_token %}
+                  <button class="" type="submit">Delete</button>
+              </form>
+
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+</body>
+</html>
