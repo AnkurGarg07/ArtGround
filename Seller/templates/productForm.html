@@ -42,12 +42,56 @@
         </div>
     </section>
     <section class="w-[40%] bg-primary">
-        <div class="imageUploadBox">
-            <h1> Upload your product image</h1>
-            <input type="file"/>
+         <h1 class="font-semibold text-text">Upload Your Product Image</h1>
+        <div
+          class="bg-product p-4 w-[70%] h-[350px] rounded-2xl"
+          onclick="getProductImage()"
+        >
+          <img src="" alt="" id="product_image" />
+          <input
+            type="file"
+            accept=".png, .jpg, .jpeg"
+            name="product image"
+            id="product_image_picker"
+            onchange="readURL(this)"
+            hidden
+          />
+          <div
+            class="border-2 border-dashed border-secondary h-full rounded-xl flex flex-col justify-center items-center"
+          >
+            <img
+              src="{% static 'assets/upload-icon.png' %}"
+              alt=""
+              class="mix-blend-overlay size-[50px]"
+            />
+            <p class="text-secondary font-medium">Upload Image</p>
+            <p class="text-secondary text-sm">PNG, JPG, JPEG only</p>
+          </div>
         </div>
     </section>
 </form>
 </div>
+<script>
+      let product_image_picker = document.getElementById(
+        "product_image_picker"
+      );
+      let product_image = document.getElementById("product_image");
+
+      function getProductImage() {
+        product_image_picker.click();
+        // product_image.src = URL.createObjectURL(product_image_picker.files[0]);
+      }
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            document.getElementById("product_image").src = e.target.result;
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
 </body>
 </html>

@@ -30,8 +30,12 @@ def register(request, user_type):
 
                 login(request, user, backend='Account.backends.EmailBackend')  # Use Django's login method
                 if user.is_customer:
+                    request.session['Customer'] = user.email
+                    request.session['cart'] = {}
                     return redirect('home')
                 elif user.is_seller:
+                    request.session['seller'] = user.email
+
                     return redirect('sellerHome')
             else:
                 messages.error(request, 'Profile form is invalid. Please correct the errors below.')

@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
-
-{{ form.email }}
+    <label for="email">Email</label>
+{% render_field form.email id="email" %}
     {{ form.paymentType }}
 {% endblock %}
 

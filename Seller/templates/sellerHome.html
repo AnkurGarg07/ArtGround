@@ -50,7 +50,10 @@
           <button class="bg-primary text-center text-text p-2 rounded-lg w-[60%]">
             ↗ &nbsp; See Sales
           </button>
-
+            <div>
+                {{ request.user.seller.full_name }}
+                {{ request.user}}
+            </div>
           <button class="bg-accent text-primary text-center p-2 rounded-lg">
             + Add Product
           </button>
