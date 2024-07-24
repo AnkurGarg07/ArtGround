@@ -1,10 +1,53 @@
 <!DOCTYPE html>
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% tailwind_css %}
 </head>
 <body>
-form
+<div class="mainContainer font-Montserrat" >
+    <form class="min-h-screen flex">
+    <section class="w-[60%] bg-product">
+        <div class="formBox h-full px-[50px] pt-[50px]">
+           <h1 class="font-[700] text-[35px] text-text font-Montserrat">Add product</h1>
+            <div class="flex flex-col py-[20px]">
+                <label for="name" class="px-2 font-[600]">Product name</label>
+                {% render_field form.name class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="name" placeholder="Enter product name" %}
+            </div>
+            <div class="flex flex-col pb-[20px]">
+                <label for="description" class="px-2 font-[600]">Product description</label>
+                {% render_field form.description class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="description" placeholder="Enter product description"%}
+            </div>
+            <div class="flex w-full gap-[20px] pb-[20px]">
+                <div class="flex flex-col w-1/2">
+                    <label for="price"  class="px-2 font-[600]">Price</label>
+                    {% render_field form.price class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="price" placeholder="Enter price" %}
+                </div>
+                <div class="flex flex-col w-1/2">
+                    <label for="category"  class="px-2 font-[600]">Category</label>
+                    {% render_field form.category class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="category" placeholder="Enter price" %}
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <label for="size"  class="px-2 font-[600]">Select Size</label>
+                {% render_field form.size class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="size" %}
+            </div>
+            <div class="flex flex-col mt-[20px]">
+                <button type="submit" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[10px] text-md px-5 py-3 text-center ">Add Product</button>
+            </div>
+
+        </div>
+    </section>
+    <section class="w-[40%] bg-primary">
+        <div class="imageUploadBox">
+            <h1> Upload your product image</h1>
+            <input type="file"/>
+        </div>
+    </section>
+</form>
+</div>
 </body>
 </html>

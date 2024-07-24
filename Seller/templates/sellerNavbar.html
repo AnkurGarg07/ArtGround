@@ -1,0 +1,40 @@
+{% block navbar %} {% load static %} {% load static tailwind_tags %}
+<nav class="bg-primary font-[Montserrat]">
+  <div class="flex w-full justify-between items-center h-[70px]">
+    <span class="flex justify-center items-center">
+      <img src="{% static 'images/logo.png' %}" alt="logo" class="h-10" />
+    </span>
+    <ul
+      class="flex justify-center items-center text-text gap-6 font-medium text-[16px]"
+    >
+      <li><a href="">Home</a></li>
+      <li><a href="">All Products</a></li>
+      <li><a href="">Sales</a></li>
+      <!-- <li><a href="">About</a></li> -->
+      <li>
+        <a class="bg-accent text-primary py-2 px-6 rounded-full" href="{% url 'addProducts' %}"
+          >+ Add Product</a
+        >
+      </li>
+
+      <li
+        class="bg-text text-primary py-2 px-[10px] rounded-full flex justify-center items-center"
+      >
+        <a class="" href=""
+          ><img src="{% static 'assets/user-icon.png' %}" alt="" class="w-4"
+        /></a>
+      </li>
+      <li
+        class="bg-secondary text-primary p-2 rounded-full flex justify-center items-center"
+      >
+        <a class="sellerLogout" href="{% url 'logout_seller' %}">
+        <img
+            src="{% static 'assets/logout-icon.png' %}"
+            alt=""
+            class="mix-blend-overlay size-6"
+        /></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
