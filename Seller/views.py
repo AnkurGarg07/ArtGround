@@ -15,8 +15,8 @@ def sellerHome(request):
 @login_required()
 @seller_required
 def addProducts(request):
-    productForm = productForm()
-    return render(request, 'productForm.html')
+    form = productForm()
+    return render(request, 'productForm.html', {'form': form})
 
 
 @login_required()

@@ -749,40 +749,6 @@ select {
   --tw-contain-style:  ;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-  }
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -841,6 +807,11 @@ select {
 .my-6 {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+.my-\[50px\] {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .mb-4 {
@@ -905,6 +876,18 @@ select {
 
 .mt-auto {
   margin-top: auto;
+}
+
+.mt-\[100px\] {
+  margin-top: 100px;
+}
+
+.mt-\[50px\] {
+  margin-top: 50px;
+}
+
+.mt-\[20px\] {
+  margin-top: 20px;
 }
 
 .block {
@@ -1002,16 +985,20 @@ select {
   width: 1px;
 }
 
-.w-full {
-  width: 100%;
+.w-\[40\%\] {
+  width: 40%;
 }
 
 .w-\[60\%\] {
   width: 60%;
 }
 
-.w-\[40\%\] {
-  width: 40%;
+.w-full {
+  width: 100%;
+}
+
+.w-1\/2 {
+  width: 50%;
 }
 
 .cursor-pointer {
@@ -1062,6 +1049,10 @@ select {
   gap: 2rem;
 }
 
+.gap-\[20px\] {
+  gap: 20px;
+}
+
 .-space-x-px > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(-1px * var(--tw-space-x-reverse));
@@ -1104,6 +1095,22 @@ select {
 
 .rounded-lg {
   border-radius: 0.5rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.rounded-\[18px\] {
+  border-radius: 18px;
+}
+
+.rounded-\[15px\] {
+  border-radius: 15px;
 }
 
 .rounded-e-full {
@@ -1231,6 +1238,14 @@ select {
   padding: 1.5rem;
 }
 
+.p-5 {
+  padding: 1.25rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1249,6 +1264,11 @@ select {
 .px-\[15px\] {
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.px-\[20px\] {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .px-\[40px\] {
@@ -1281,6 +1301,31 @@ select {
   padding-bottom: 2rem;
 }
 
+.px-\[50px\] {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.py-\[20px\] {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.px-2\.5 {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -1299,6 +1344,14 @@ select {
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.pt-\[50px\] {
+  padding-top: 50px;
+}
+
+.pb-\[20px\] {
+  padding-bottom: 20px;
 }
 
 .text-center {
@@ -1352,6 +1405,10 @@ select {
   line-height: 1.75rem;
 }
 
+.text-\[35px\] {
+  font-size: 35px;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -1361,6 +1418,14 @@ select {
 }
 
 .font-semibold {
+  font-weight: 600;
+}
+
+.font-\[700\] {
+  font-weight: 700;
+}
+
+.font-\[600\] {
   font-weight: 600;
 }
 
@@ -1443,6 +1508,24 @@ select {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.placeholder\:font-Montserrat::-moz-placeholder {
+  font-family: Montserrat, sans-serif;
+}
+
+.placeholder\:font-Montserrat::placeholder {
+  font-family: Montserrat, sans-serif;
+}
+
+.placeholder\:text-secondary::-moz-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(173 185 209 / var(--tw-text-opacity));
+}
+
+.placeholder\:text-secondary::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(173 185 209 / var(--tw-text-opacity));
 }
 
 .hover\:bg-gray-100:hover {
