@@ -1,5 +1,4 @@
 {% block navbar %} {% load static %} {% load static tailwind_tags %}
-<!-- {% load custom_filters %} -->
 <nav class="bg-primary font-[Montserrat]">
   <div class="flex w-full justify-between items-center h-[70px]">
     <span class="flex justify-center items-center">
@@ -13,7 +12,7 @@
       <li><a href="">Sales</a></li>
       <!-- <li><a href="">About</a></li> -->
       <li>
-        <a class="bg-accent text-primary py-2 px-6 rounded-full" href=""
+        <a class="bg-accent text-primary py-2 px-6 rounded-full" href="{% url 'addProducts' %}"
           >+ Add Product</a
         >
       </li>
@@ -28,8 +27,8 @@
       <li
         class="bg-secondary text-primary p-2 rounded-full flex justify-center items-center"
       >
-        <a class="" href=""
-          ><img
+        <a class="sellerLogout" href="{% url 'logout_seller' %}">
+        <img
             src="{% static 'assets/logout-icon.png' %}"
             alt=""
             class="mix-blend-overlay size-6"
