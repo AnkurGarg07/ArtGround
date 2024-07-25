@@ -32,17 +32,17 @@
           </div>
         </div>
         <div
-          class="bg-product rounded-lg flex flex-col justify-between rounded-lg p-6 text-2xl font-bold"
+          class="bg-product rounded-lg flex flex-col justify-between  p-6 text-2xl font-bold"
         >
           <h1 class="text-text">Total Products</h1>
           <div class="text-text text-5xl">
             126
           </div>
-          <button
-            class="text-accent border-2 border-accent text-lg p-2 rounded-lg"
+          <a href="{% url 'allProducts' %}"
+            class="text-accent border-2 border-accent text-lg p-2 rounded-lg text-center"
           >
             View All
-          </button>
+          </a>
         </div>
         <div
           class="col-span-2 bg-product flex flex-col justify-between rounded-lg p-6 text-lg font-semibold"
