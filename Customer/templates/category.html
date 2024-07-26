@@ -7,7 +7,7 @@
       <div class="grid grid-cols-5 gap-4 my-4 pb-2">
         {% for painting in products %}
         <div title="{{ painting.description }}" class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" id="{{ painting.product_id }}">
-          <img src="/media/{{ painting.image }}" alt="" class="" />
+          <img src="/media/{{ painting.image }}" alt="" class="w-full h-full object-cover rounded-xl" />
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
               <span class="text-text font-semibold text-[18px]" 

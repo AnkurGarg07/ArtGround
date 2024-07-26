@@ -1,0 +1,76 @@
+{% load static %} {% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Total Sales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    {% tailwind_css %}
+  </head>
+  <body
+    class="bg-primary px-[60px] w-[100vw] overflow-x-hidden font-[Montserrat]"
+  >
+    <div class="border-product">
+      {% include 'sellerNavbar.html' %}
+      <h1 class="text-text text-2xl font-bold py-4">Total Sales</h1>
+      <div class="w-full flex flex-col">
+        <!-- <span
+          class="flex justify-between items-center p-4 rounded-lg bg-product text-text font-semibold"
+        >
+          <p></p>
+          <p>Product Name</p>
+          <p>Date</p>
+          <p>Price</p>
+          <p>Sales</p>
+        </span> -->
+        <div class="h-[75vh] w-full overflow-y-auto">
+          <table class="w-full overflow-x-auto font-[Montserrat]">
+            <thead>
+              <tr class="text-center border-b-2 font-[Montserrat]">
+                <th class="text-left py-4 mb-4">Product Image</th>
+                <th class="text-left">Product Name</th>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Sales</th>
+              </tr>
+            </thead>
+            {% for product in product_sales %}
+            <tr
+              class="text-center hover:bg-product border-b-2 font-[Montserrat]"
+            >
+              <td class="p-2 mx-auto w-[20%]">
+                <a
+                  href="{{product.image}}"
+                  target="_blank"
+                  onclick="window.open(this.href, 'Snopzer','left=50,top=50,width=500,height=500,toolbar=1,resizable=0'); return false;"
+                >
+                  <img
+                    src="{{product.image}}"
+                    alt=""
+                    class="size-[60px] rounded-sm"
+                  />
+                </a>
+              </td>
+              <td class="w-[30%] text-left">{{product.title}}</td>
+              <td class="w-[15%]">{{product.date}}</td>
+              <td class="w-[15%]">₹{{product.price}}</td>
+              <td class="w-[15%]">{{product.sales}}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          <!-- <span
+            class="flex justify-between items-center p-4 border-b-2 border-product text-text font-medium"
+          >
+            <p><img src="{{product.image}}" alt="" class="size-[50px]"></p>
+            <p>{{product.title}}</p>
+            <p>{{product.date}}</p>
+            <p>{{product.price}}</p>
+            <p>{{product.sales}}</p>
+          </span> -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

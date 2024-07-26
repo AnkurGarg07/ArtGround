@@ -8,6 +8,7 @@ from Account.models import Seller, User
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
+        ('null', 'Select Category'),
         ('oil', 'Oil painting'),
         ('acrylic', 'Acrylic painting'),
         ('water', 'water painting'),
@@ -17,6 +18,7 @@ class Product(models.Model):
     ]
 
     SIZE_CHOICES = [
+        ('null', 'Select Size'),
         ('4x8', '4 x 8 inches (10.16 x 20.32 cm) - Small'),
         ('8x10', '8 x 10 inches (20.32 x 25.4 cm) - Medium'),
         ('16x20', '16 x 20 inches (40.64 x 50.8 cm) - Large'),
@@ -34,8 +36,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     image = models.ImageField(upload_to='product_images/')
-    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
-    size = models.CharField(max_length=6, choices=SIZE_CHOICES)
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='null')
+    size = models.CharField(max_length=6, choices=SIZE_CHOICES, default='null')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
