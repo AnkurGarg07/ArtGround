@@ -30,7 +30,7 @@
             <span class="mix-blend-overlay text-black">Cart</span></span
           >
           <span
-            class="bg-accent text-primary text-[10px] rounded-full p-2 size-6 flex justify-center items-center absolute top-[-5] right-0 font-semibold"
+            class="bg-accent text-primary text-[10px] rounded-full p-2 size-6 flex justify-center items-center absolute top-[-5px] right-0 font-semibold"
             >{{ request.session.cart|cart_total }}</span
           >
         </a>
@@ -38,7 +38,7 @@
       <li
         class="bg-secondary text-primary p-2 rounded-full flex justify-center items-center"
       >
-        <a class="sellerLogout" href="{% url 'logout_seller' %}">
+        <a class="Logout" href="{% url 'logout' %}">
           <img
             src="{% static 'assets/logout-icon.png' %}"
             alt=""

@@ -5,7 +5,7 @@ from .models import shippingInfo
 class shippingForm(forms.ModelForm):
     class Meta:
         model = shippingInfo
-        fields = '__all__'
+        fields = ['first_name', 'last_name', 'email', 'phoneNumber', 'address1', 'address2', 'Country', 'State', 'City', 'zipCode', 'paymentType']
         widgets = {
             'paymentType': forms.RadioSelect,
         }

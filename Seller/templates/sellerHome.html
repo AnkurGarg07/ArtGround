@@ -1,5 +1,7 @@
 {% load static %} {% load static tailwind_tags %}
+{% load seller_filters %}
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -36,7 +38,7 @@
         >
           <h1 class="text-text">Total Products</h1>
           <div class="text-text text-5xl">
-            126
+            {{ request.user.seller|total_products_listed }}
           </div>
           <a
             href="{% url 'allProducts' %}"
@@ -52,11 +54,13 @@
             <div class="flex flex-col">
               <span>Name :</span>
               <span>Email :</span>
+                <span>Phone :</span>
               <!-- <span>Today Sales : </span> -->
             </div>
             <div class="flex flex-col">
               <span>{{ request.user.seller.full_name }}</span>
               <span>{{ request.user }}</span>
+                <span>{{ request.user.seller.phone_number }}</span>
               <!-- <span>₹</span> -->
             </div>
           </div>

@@ -1,5 +1,7 @@
 from django.db import models
 
+from Account.models import Customer
+
 
 # Create your models here.
 class shippingInfo(models.Model):
@@ -8,12 +10,13 @@ class shippingInfo(models.Model):
         ('Credit Card', 'Credit Card'),
         ('UPI', 'UPI')
     ]
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE,default=None)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
     phoneNumber = models.CharField(max_length=10)
     address1 = models.CharField(max_length=100)
-    address2 = models.CharField(max_length=100)
+    address2 = models.CharField(max_length=100,blank=True, null=True)
     Country = models.CharField(max_length=50)
     State = models.CharField(max_length=50)
     City = models.CharField(max_length=50)

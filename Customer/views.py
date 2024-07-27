@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render
 
 # Create your views here.
@@ -8,6 +9,7 @@ from django.core.paginator import Paginator
 from Account.decorators import customer_required, seller_required
 from Customer.forms import shippingForm
 from Seller.models import Product
+
 
 @login_required()
 @customer_required
@@ -168,14 +170,47 @@ def about(request):
 @login_required()
 @customer_required
 def checkout(request):
-    form = shippingForm()
-    return render(request, 'checkout.html', {'form': form})
+    if request.method == 'POST':
+        product_id = request.POST.get('productID')
+        print("outer")
+        if product_id:
+            print(product_id)
+            remove = request.POST.get('remove')
+            cart = request.session.get('cart')
+            quantity = cart.get(product_id)
+            if remove:
+                if quantity == 1:
+                    cart.pop(product_id)
+                else:
+                    cart[product_id] = quantity - 1
+            else:
+                cart[product_id] = quantity + 1
+            request.session['cart'] = cart
+            return redirect('checkout')
+
+        form = shippingForm(request.POST)
+        print(request.user)
+        if form.is_valid():
+            shippingInfo = form.save(commit=False)
+            shippingInfo.customer = request.user.customer
+            shippingInfo.save()
+            messages.success(request, 'Your shipping has been done!')
+            return redirect('orderConfirmation')
+        else:
+            print("Form invalid")
+            print(form.errors)
+    else:
+        form = shippingForm()
+    cart_products_list = list(request.session.get('cart').keys())
+    cart_products = Product.objects.filter(product_id__in=cart_products_list)
+    return render(request, 'checkout.html', {'form': form, 'cart_products': cart_products})
 
 
 @login_required()
 @customer_required
 def orderConfirmation(request):
     return render(request, 'orderConfirm.html')
+
 
 @login_required()
 @customer_required
