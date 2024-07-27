@@ -18,7 +18,7 @@ class shippingInfo(models.Model):
     State = models.CharField(max_length=50)
     City = models.CharField(max_length=50)
     zipCode = models.CharField(max_length=50)
-    paymentType = models.CharField(max_length=50, choices=choices ,default='Bank Transfer')
+    paymentType = models.CharField(max_length=50, choices=choices, default='Bank Transfer')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
