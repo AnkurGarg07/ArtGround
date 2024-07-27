@@ -50,3 +50,8 @@
 .search-input:focus {
   outline: 0px;
 }
+
+#id_paymentType{
+  display: grid !important;
+  grid-template-columns: 3fr !important;
+}

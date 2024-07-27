@@ -1,8 +1,121 @@
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block content %}
-    <label for="email">Email</label>
-{% render_field form.email id="email" %}
-    {{ form.paymentType }}
-{% endblock %}
+{% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
 
+<div class="flex justify-center h-full w-full items-center">
+  <div class="w-[60%] bg-product p-[20px] h-full">
+    <h1 class="font-bold text-[25px] text-text font-Montserrat">
+      Fill Your Details
+    </h1>
+    <form action="" class="grid gap-2 text-text">
+      <div class="grid grid-cols-2 gap-4 mt-2">
+        <div class="flex flex-col gap-2">
+          <label for="name" class="font-semibold">First Name</label>
+          {% render_field form.first_name id="first_name" class+="rounded-lg border-none" placeholder="Enter first name" %}
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">Last Name</label>
+          {% render_field form.last_name id="last_name" class+="rounded-lg border-none" placeholder="Enter last name" %}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-2">
+        <div class="flex flex-col gap-2">
+          <label for="name" class="font-semibold">Email Address</label>
+          {% render_field form.email id="email" class+="rounded-lg border-none" placeholder="abc@example.com" %}
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">Phone Number</label>
+          {% render_field form.phoneNumber id="phoneNumber" class+="rounded-lg border-none" placeholder="+91 9718xxxx38" %}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 mt-2">
+        <div class="flex flex-col gap-2">
+          <label for="name" class="font-semibold">Shipping Address Line 1</label>
+          {% render_field form.address1 id="address1" class+="rounded-lg border-none" placeholder="Address line 1" %}
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">Shipping Address Line 2</label>
+          {% render_field form.address2 id="address2" class+="rounded-lg border-none" placeholder="Address line 2" %}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-2">
+        <div class="flex flex-col gap-2">
+          <label for="name" class="font-semibold">Country</label>
+          {% render_field form.Country id="Country" class+="rounded-lg border-none" placeholder="Enter country name" %}
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">Zip/Postal Code</label>
+          {% render_field form.zipCode id="zipCode" class+="rounded-lg border-none" placeholder="Enter zip/postal code" %}
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2">
+        <div class="flex flex-col gap-2">
+          <label for="name" class="font-semibold">State</label>
+          {% render_field form.State id="State" class+="rounded-lg border-none" placeholder="Enter state name" %}
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">City</label>
+          {% render_field form.City id="City" class+="rounded-lg border-none" placeholder="Enter city name" %}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 mt-2">
+        <label for="name" class="font-semibold">Payment Method</label>
+        {{ form.paymentType }}
+      </div>
+    </form>
+  </div>
+  <div class="w-[40%] bg-secondary h-full relative">
+    <h1 class="font-bold text-[25px] p-[20px]  text-text font-Montserrat">
+      Your Cart
+    </h1>
+    <div class="h-[60%] w-full p-[20px] grid grid-cols-1 gap-2 overflow-y-auto ">
+        <!-- cart product start -->
+        <div class="flex items-center h-fit w-full bg-primary px-4 py-2 rounded-md">
+            <img src="http://127.0.0.1:8000/media/product_images/IMG-20240629-WA0010.jpg" alt="" 
+            class="size-[70px] rounded-md">
+            <div class="flex flex-col ml-5">
+                <span class="text-text text-[20px] font-semibold">Painting 1</span>
+                <span class="text-secondary text-[12px]">InkSet Printer</span>
+                <span class="text-accent text-[20px] font-bold">₹ 899</span>
+            </div>
+            <div class="flex justify-around items-center font-extrabold w-[100px] ml-auto mt-auto text-[15px] bg-secondary rounded-md">
+                <span class="mr-[4px] ml-[8px] text-accent text-[20px] cursor-pointer">−</span>
+                <span class="bg-primary py-2 px-2 rounded-sm text-text cursor-not-allowed">02</span>
+                <span class="mr-[8px] ml-[4px] text-accent text-[20px] cursor-pointer">+</span>
+            </div>
+        </div>
+        <!-- cart product end -->
+    </div>
+    <div class="h-[30%] gap-6 absolute bottom-0 w-full grid grid-cols-1 mx-auto p-[20px] bg-primary rounded-t-2xl border-2">
+        <div class="w-full grid grid-cols-1 font-semibold">
+            <span class="flex justify-between">
+                <span>Subtotal</span>    
+                <span>₹ 3725</span>    
+            </span>
+            <span class="flex justify-between">
+                <span>Shipping Cost</span>    
+                <span class="text-[#D92020]">₹ 60</span>    
+            </span>
+            <span class="flex justify-between">
+                <span>Taxes</span>    
+
+                <span class="text-[#D92020]">₹ 3725</span>    
+            </span>
+        </div>
+        <div class="grid grid-cols-2 bg-text text-primary justify-center items-center p-[15px] rounded-lg">
+            <div class="flex flex-col justify-center">
+                <span class="font-semibold">₹ 6289</span>
+                <span class="text-sm">inclusive of all taxes</span>
+            </div>
+            <button class="bg-primary h-full text-text rounded-md font-bold ">
+               Buy Now
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+<!-- <label for="email">Email</label> -->
+<!-- {% render_field form.email id="email" %} {{ form.paymentType }} -->

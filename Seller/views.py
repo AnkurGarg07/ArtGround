@@ -84,6 +84,91 @@ def sellerHome(request):
     ]
 
     return render(request, 'sellerHome.html', {'product_sales': product_sales})
+def TotalSales(request):
+    product_sales = [
+        {
+            'id': 1,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "Vintage Car",
+            'price': "449",
+            'date': "2021-09-12",
+            'sales': "325",
+        },
+        {
+            'id': 2,
+            'image': "http://127.0.0.1:8000/media/product_images/IMG-20240629-WA0010.jpg",
+            'title': "Long Head Birds",
+            'price': "899",
+            'date': "2021-09-12",
+            'sales': "315",
+        },
+        {
+            'id': 3,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "3D Flower Pot",
+            'price': "1299",
+            'date': "2021-09-12",
+            'sales': "65",
+        },
+        {
+            'id': 4,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "The Horse Rider",
+            'price': "999",
+            'date': "2021-09-12",
+            'sales': "135",
+        },
+        {
+            'id': 5,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "Vintage Car",
+            'price': "449",
+            'date': "2021-09-12",
+            'sales': "353",
+        },
+        {
+            'id': 1,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "Vintage Car",
+            'price': "449",
+            'date': "2021-09-12",
+            'sales': "115",
+        },
+        {
+            'id': 2,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "Long Head Birds",
+            'price': "899",
+            'date': "2021-09-12",
+            'sales': "325",
+        },
+        {
+            'id': 3,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "3D Flower Pot",
+            'price': "1299",
+            'date': "2021-09-12",
+            'sales': "252",
+        },
+        {
+            'id': 4,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "The Horse Rider",
+            'price': "999",
+            'date': "2021-09-12",
+            'sales': "332",
+        },
+        {
+            'id': 5,
+            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
+            'title': "Vintage Car",
+            'price': "449",
+            'date': "2021-09-12",
+            'sales': "62",
+        },
+    ]
+
+    return render(request, 'TotalSales.html', {'product_sales': product_sales})
 
 
 @login_required()

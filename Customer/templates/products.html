@@ -24,7 +24,7 @@
       <div class="grid grid-cols-5 gap-4 my-6 pb-4">
         {% for item in all_products %}
         <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" title="{{ item.description }}" id="{{ item.product_id }}">
-          <img src="/media/{{ item.image }}" alt="" class="" />
+          <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl" />
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
               <span class="text-text font-semibold text-[18px]"

@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Product</title>
     {% tailwind_css %}
 </head>
 <body>
@@ -26,7 +26,7 @@
             </div>
             <div class="flex flex-col pb-[20px]">
                 <label for="description" class="px-2 font-[600]">Product description</label>
-                {% render_field form.description class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="description" placeholder="Enter product description"%}
+                {% render_field form.description class+="bg-primary resize-none border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="description" placeholder="Enter product description"%}
             </div>
             <div class="flex w-full gap-[20px] pb-[20px]">
                 <div class="flex flex-col w-1/2">
@@ -35,7 +35,7 @@
                 </div>
                 <div class="flex flex-col w-1/2">
                     <label for="category"  class="px-2 font-[600]">Category</label>
-                    {% render_field form.category class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="category" placeholder="Enter price" %}
+                    {% render_field form.category class+="bg-primary border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-3 placeholder:text-secondary placeholder:font-Montserrat" id="category" %}
                 </div>
             </div>
             <div class="flex flex-col">
@@ -52,24 +52,25 @@
 
         </div>
     </section>
-    <section class="w-[40%] bg-primary">
-         <h1 class="font-semibold text-text">Upload Your Product Image</h1>
-        {% render_field form.image %}
+    <section class="w-[40%] bg-primary flex flex-col pt-[50px] px-[50px]">
+         <h1 class="font-semibold text-center text-[25px] text-text font-Montserrat">Upload Your Product Image</h1>
+        {% render_field form.image class+="hidden" onchange+="readURL(this)" accept+=".png, .jpg, .jpeg" name+="product image" id+="product_image_picker" %}
         <div
-          class="bg-product p-4 w-[70%] h-[350px] rounded-2xl"
+          class="bg-product p-4 w-[60%] h-[350px] rounded-2xl mx-auto mt-[50px] cursor-pointer"
           onclick="getProductImage()"
         >
-          <img src="" alt="" id="product_image" />
-          <input
+          <img src="" alt="" id="product_image" class="rounded-xl object-cover position-center h-full w-full hidden" />
+          <!-- <input
             type="file"
             accept=".png, .jpg, .jpeg"
             name="product image"
             id="product_image_picker"
             onchange="readURL(this)"
             hidden
-          />
+          /> -->
           <div
             class="border-2 border-dashed border-secondary h-full rounded-xl flex flex-col justify-center items-center"
+            id="uploadBox"
           >
             <img
               src="{% static 'assets/upload-icon.png' %}"
@@ -78,6 +79,7 @@
             />
             <p class="text-secondary font-medium">Upload Image</p>
             <p class="text-secondary text-sm">PNG, JPG, JPEG only</p>
+            <p class="text-secondary text-sm">preferred 512x512 PX</p>
           </div>
         </div>
     </section>
@@ -88,6 +90,7 @@
         "product_image_picker"
       );
       let product_image = document.getElementById("product_image");
+      let uploadBox = document.getElementById("uploadBox");
 
       function getProductImage() {
         product_image_picker.click();
@@ -99,9 +102,11 @@
 
           reader.onload = function (e) {
             document.getElementById("product_image").src = e.target.result;
+            product_image.style.display = "block";
           };
 
           reader.readAsDataURL(input.files[0]);
+          uploadBox.style.display = "none";
         }
       }
     </script>
