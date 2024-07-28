@@ -122,6 +122,12 @@ def products(request):
             products = Product.objects.filter(name__icontains=query)
         return render(request, 'products.html', {'all_products': products})
 
+@login_required()
+@customer_required
+def product_page(request, product_id):
+    product = Product.objects.get(product_id=product_id)
+    return render(request, 'ProductPage.html', {'product': product})
+
 
 @login_required()
 @customer_required

@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     {% tailwind_css %}
     <link rel="stylesheet" href="../../static/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,9 +18,9 @@
 </head>
 <body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
 {% include 'navbar.html' %}
-<div class="flex justify-center h-full w-full items-center">
+<div class="flex justify-center w-full items-center">
 
-  <div class="w-[60%] bg-product p-[20px] h-full">
+  <div class="w-[60%] bg-product p-[20px] h-[100vh]">
     <h1 class="font-bold text-[25px] text-text font-Montserrat">
       Fill Your Details
     </h1>
@@ -88,14 +89,34 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 gap-4 mt-2">
+      <div class="flex flex-col gap-2">
         <label for="name" class="font-semibold">Payment Method</label>
-        {{ form.paymentType }}
+        <!-- {{ form.paymentType }} -->
+        <div class="grid grid-cols-3 gap-2">
+            <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary border-accent"
+              onclick="SelectPaymentMethod('bank_transfer')">
+              <input type="radio" name="paymentType" id="bank_transfer" value="bank_transfer" class="size-6 accent-accent mr-2" checked>
+              <img src="https://cdn-icons-png.flaticon.com/512/1018/1018197.png" alt="" class="size-6">
+              <p>Bank Transfer</p>
+            </span>
+            <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary"
+              onclick="SelectPaymentMethod('card')">
+              <input type="radio" name="paymentType" id="card" value="card" class="size-6 accent-accent mr-2">
+              <img src="https://cdn-icons-png.flaticon.com/512/8983/8983163.png" alt="" class="size-8">
+              <p>Credit Card</p>
+            </span>
+            <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary"
+              onclick="SelectPaymentMethod('upi')">
+              <input type="radio" name="paymentType" id="upi" value="upi" class="size-6 accent-accent mr-2">
+              <img src="https://www.npci.org.in/images/npci/upi/upi-logo.png" alt="" class="h-4">
+              <p>UPI</p>
+            </span>
+        </div>
           <span class="text-red-500" id="paymentType_error"></span>
       </div>
     </form>
   </div>
-  <div class="w-[40%] bg-secondary h-full relative">
+  <div class="w-[40%] bg-secondary h-[100vh] relative">
     <h1 class="font-bold text-[25px] p-[20px]  text-text font-Montserrat">
       Your Cart
     </h1>
@@ -127,9 +148,10 @@
             </div>
         </div>
             {% empty %}
-            <div class="flex flex-col justify-center items-center">
-            <p>No products in the cart?</p>
-            <a  class="bg-accent text-primary rounded-[20px] font-bold p-3" href={% url 'products' %}>Add some</a>
+            <div class="flex flex-col justify-center items-center gap-4">
+              <img src="https://media-public.canva.com/56ar4/MAEcWd56ar4/1/tl.png" alt="" class="size-[120px] mix-blend-overlay rotate-[-12deg]">
+            <p class="text-text">OOPS! Your Cart is empty</p>
+            <a  class="bg-primary text-accent rounded-[20px] font-semibold py-2 px-14" href="{% url 'products' %}">Add Products</a>
             </div>
         {% endfor %}
         <!-- cart product end -->
@@ -254,6 +276,23 @@
     event.preventDefault();
   }
 });
+
+function SelectPaymentMethod(type){
+    console.log(type);
+    let Type = document.getElementById(type);
+    methods = ['bank_transfer', 'card', 'upi'];
+    methods.forEach(function(method){
+        if(method !== type){
+            let otherMethod = document.getElementById(method);
+            otherMethod.checked = false;
+            otherMethod.parentElement.classList.remove('border-accent');
+        }else{
+            Type.parentElement.classList.add('border-accent');
+            Type.checked = true;
+        }
+    });
+}
+
 </script>
 </body>
 </html>

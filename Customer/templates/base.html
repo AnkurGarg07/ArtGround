@@ -37,21 +37,16 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <!-- <link rel="icon" href="../../static/assets/favicon.png" type="image/png" /> -->
     <link
       rel="icon"
-      href="{% static 'assets/search-icon.svg' %}"
-      type="image/svg+xml"
+      href="https://firebasestorage.googleapis.com/v0/b/sample-data-afa07.appspot.com/o/favicon.png?alt=media&token=1da6bc05-baf3-4627-93ab-5cc368250819"
+      type="image/png"
     />
   </head>
 
   <body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
     <!-- Navbar -->
-    {% include 'navbar.html' %} 
-    {% block content %} {% endblock %}
-
-    {% include 'footer.html' %}
-
-
-
+    {% include 'navbar.html' %} {% block content %} {% endblock %} {% include 'footer.html' %}
   </body>
 </html>

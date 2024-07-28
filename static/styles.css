@@ -32,7 +32,25 @@
   background: #6a98f0;
 } */
 
-.search-input {
+.search-input,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="search"],
+input[type="url"],
+input[type="color"],
+input[type="file"],
+input[type="radio"],
+input[type="checkbox"],
+select,
+textarea {
   width: 100%;
   /* padding: 10px; */
   background-color: var(--primary);
@@ -41,6 +59,7 @@
   /* margin-bottom: 10px; */
   color: #adb9d1 !important;
   --tw-ring-color: none !important;
+  accent-color: #4a68a9 !important;
 }
 
 ::placeholder {
@@ -51,7 +70,11 @@
   outline: 0px;
 }
 
-#id_paymentType{
+#id_paymentType {
   display: grid !important;
   grid-template-columns: 3fr !important;
+}
+
+input[type="radio"] {
+  accent-color: #4a68a9 !important;
 }

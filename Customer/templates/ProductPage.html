@@ -1,0 +1,97 @@
+{% load static tailwind_tags %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{product.name}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../static/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FFFBFC",
+              secondary: "#ADB9D1",
+              accent: "#4A68A9",
+              text: "#32384A",
+              product: "#ECEDEF",
+            },
+          },
+        },
+      };
+    </script>
+
+    {% tailwind_css %}
+  </head>
+  <body class="bg-primary px-[60px] overflow-x-hidden">
+    {% include 'navbar.html' %}
+    <div class="grid grid-cols-2 h-[80vh] mt-5">
+      <div class="p-10">
+        <img
+          src="/media/{{product.image}}"
+          alt=""
+          class="w-[80%] mx-auto rounded-lg"
+        />
+      </div>
+      <div class="border-l-4 border-secondary p-10 px-20 flex flex-col gap-2">
+        <h1 class="text-[35px] text-text font-bold">{{product.name}}</h1>
+        <h2 class="text-[20px] text-secondary font-semibold">{{product.seller}}</h2>
+        <h3 class="text-[14px] text-secondary w-fit px-4 py-1 rounded-md bg-accent font-semibold">{{product.size}}</h3>
+        <p class="text-[18px] text-text mt-5">{{product.description}}
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. At reprehenderit iste voluptatum esse exercitationem, nemo ducimus ipsa ut, voluptates consequuntur dolore dolor autem ipsam vero laborum quaerat omnis quibusdam explicabo velit. Ipsam id nihil itaque cupiditate doloremque aliquid rem, rerum repudiandae sequi corrupti error dolor at facilis optio odit sunt?
+        </p>
+        <div class="flex gap-4 mt-5 text-[30px] text-text font-bold">
+         ₹{{product.price}}
+      </div>
+        <div class="flex gap-2 w-[60%] mt-4">
+{#          if products in cart are there#}
+                  {% if product|is_in_cart:request.session.cart %}
+              <div class="w-full h-full text-text flex justify-between items-center border-solid border-[2px] rounded-full"  >
+                  {% csrf_token %}
+                  	 <form method="POST" class=" h-full text-[20px] bg-accent rounded-s-full text-primary" action="/product/{{ product.product_id }}">
+                  {% csrf_token %}
+                  	<input type="text" value="{{ product.product_id }}" class="hidden" name="productID"/>
+                         <input type="text" value="True" class="hidden" name="remove"/>
+                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">-</button>
+              </form>
+                  <div>{{ product|cart_quantity:request.session.cart }} in cart</div>
+                    <form method="POST" class=" h-full text-[20px] bg-accent rounded-e-full text-primary" action="/product/{{ product.product_id }}">
+                  {% csrf_token %}
+                  	<input type="text" value="{{ product.product_id }}" class="hidden" name="productID"/>
+                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">+</button>
+              </form>
+              </div>
+{#                      if no products avaliable in cart#}
+                      {% else %}
+                       <form class="w-full" method="POST" action="/product/{{ product.product_id }}">
+                  {% csrf_token %}
+                  	<input type="text" value="{{ product.product_id }}" class="hidden" name="productID"/>
+                  <button class="w-full h-full bg-accent rounded-full py-2 text-primary" type="submit">
+              Add to cart
+                  </button>
+              </form>
+                  {% endif %}
+
+            <!-- <button class="bg-secondary p-2 rounded-full">
+              <img
+                src="../../static/assets/heart.svg"
+                alt=""
+                class="mix-blend-overlay"
+              />
+            </button> -->
+          </div>
+
+    </div>
+    <!-- {{ product.name }} {{ product.price }} {{ product.seller }} {{ product.size }} {{ product.description }} {{ product.image }} -->
+  </body>
+</html>

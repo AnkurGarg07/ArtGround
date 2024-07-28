@@ -1,5 +1,4 @@
-{% load static %} {% load static tailwind_tags %}
-{% load seller_filters %}
+{% load static %} {% load static tailwind_tags %} {% load seller_filters %}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -54,23 +53,23 @@
             <div class="flex flex-col">
               <span>Name :</span>
               <span>Email :</span>
-                <span>Phone :</span>
+              <span>Phone :</span>
               <!-- <span>Today Sales : </span> -->
             </div>
             <div class="flex flex-col">
               <span>{{ request.user.seller.full_name }}</span>
               <span>{{ request.user }}</span>
-                <span>{{ request.user.seller.phone_number }}</span>
+              <span>{{ request.user.seller.phone_number }}</span>
               <!-- <span>₹</span> -->
             </div>
           </div>
-          <button
-            class="bg-primary text-center text-text p-2 rounded-lg w-[60%]"
-          >
-            <a href="{% url 'TotalSales' %}">
+          <a href="{% url 'TotalSales' %}">
+            <button
+              class="bg-primary text-center text-text p-2 rounded-lg w-[60%]"
+            >
               ↗ &nbsp; See Sales
-            </a>
-          </button>
+            </button>
+          </a>
           <button class="bg-accent text-primary text-center p-2 rounded-lg">
             <a href="{% url 'addProducts' %}">
               + Add Product

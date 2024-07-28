@@ -23,6 +23,7 @@
       </form>
       <div class="grid grid-cols-5 gap-4 my-6 pb-4">
         {% for item in all_products %}
+        <a href="/product/{{item.product_id}}">
         <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" title="{{ item.description }}" id="{{ item.product_id }}">
           <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl" />
           <div class="flex justify-between mt-2">
@@ -31,7 +32,7 @@
                 >{{item.name}}</span
               >
               <span class="text-secondary text-[12px]">{{item.seller}}</span>
-                <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
+              <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
             </div>
               
             <div class="text-accent font-semibold flex items-top">
@@ -78,6 +79,7 @@
             </button>
           </div>
         </div>
+        </a>
             {% empty %} No relevant data found
         {% endfor %}
       </div>
