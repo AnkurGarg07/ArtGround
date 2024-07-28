@@ -1,6 +1,7 @@
 from django.db import models
 
 from Account.models import Customer
+from Seller.models import Order
 
 
 # Create your models here.
@@ -11,6 +12,7 @@ class shippingInfo(models.Model):
         ('UPI', 'UPI')
     ]
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE,default=None)
+    order=models.ForeignKey(Order, on_delete=models.CASCADE,default=None)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()

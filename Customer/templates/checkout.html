@@ -23,7 +23,7 @@
     <h1 class="font-bold text-[25px] text-text font-Montserrat">
       Fill Your Details
     </h1>
-    <form action="" class="grid gap-2 text-text" id="shippingForm" method="post">
+    <form action="{% url 'orderConfirmation' %}" class="grid gap-2 text-text" id="shippingForm" method="post">
         {% csrf_token %}
       <div class="grid grid-cols-2 gap-4 mt-2">
         <div class="flex flex-col gap-2">
