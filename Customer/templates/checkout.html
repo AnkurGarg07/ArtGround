@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     {% tailwind_css %}
     <link rel="stylesheet" href="../../static/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,7 +15,7 @@
       rel="stylesheet"
     />
 </head>
-<body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden">
+<body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden font-Montserrat">
 {% include 'navbar.html' %}
 <div class="flex justify-center w-full items-center">
 
@@ -29,7 +28,7 @@
       <div class="grid grid-cols-2 gap-4 mt-2">
         <div class="flex flex-col gap-2">
           <label for="name" class="font-semibold">First Name</label>
-          {% render_field form.first_name id="first_name" class+="rounded-lg border-none" placeholder="Enter first name" %}
+          {% render_field form.first_name id="first_name" class+="rounded-lg border-none bg-primary" placeholder="Enter first name" %}
             <span class="text-red-500" id="first_name_error"></span>
         </div>
         <div class="flex flex-col gap-2">
@@ -72,7 +71,7 @@
         </div>
         <div class="flex flex-col gap-2">
             <label for="name" class="font-semibold">Zip/Postal Code</label>
-          {% render_field form.zipCode id="zipCode" class+="rounded-lg border-none" placeholder="Enter zip/postal code" %}
+          {% render_field form.zipCode id="zipCode" class+="rounded-lg border-none bg-blue" placeholder="Enter zip/postal code" %}
             <span class="text-red-500" id="zipCode_error"></span>
         </div>
       </div>
@@ -93,24 +92,20 @@
         <label for="name" class="font-semibold">Payment Method</label>
         <!-- {{ form.paymentType }} -->
         <div class="grid grid-cols-3 gap-2">
-            <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary border-accent"
-              onclick="SelectPaymentMethod('bank_transfer')">
-              <input type="radio" name="paymentType" id="bank_transfer" value="bank_transfer" class="size-6 accent-accent mr-2" checked>
+            {% for payment_method in form.paymentType %}
+          <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary"
+              onclick="SelectPaymentMethod('{{ payment_method.id }}')">
+              {% render_field payment_method.tag %}
+              {% if payment_method.choice_label == 'Bank Transfer' %}
               <img src="https://cdn-icons-png.flaticon.com/512/1018/1018197.png" alt="" class="size-6">
-              <p>Bank Transfer</p>
-            </span>
-            <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary"
-              onclick="SelectPaymentMethod('card')">
-              <input type="radio" name="paymentType" id="card" value="card" class="size-6 accent-accent mr-2">
+              {% elif payment_method.choice_label == 'Credit Card' %}
               <img src="https://cdn-icons-png.flaticon.com/512/8983/8983163.png" alt="" class="size-8">
-              <p>Credit Card</p>
-            </span>
-            <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary"
-              onclick="SelectPaymentMethod('upi')">
-              <input type="radio" name="paymentType" id="upi" value="upi" class="size-6 accent-accent mr-2">
+              {% elif payment_method.choice_label == 'UPI' %}
               <img src="https://www.npci.org.in/images/npci/upi/upi-logo.png" alt="" class="h-4">
-              <p>UPI</p>
+              {% endif %}
+              {{ payment_method.choice_label }}
             </span>
+        {% endfor %}
         </div>
           <span class="text-red-500" id="paymentType_error"></span>
       </div>
@@ -124,6 +119,7 @@
        <div class="flex flex-col gap-[10px]">
         <!-- cart product start -->
             {% for cart_product in cart_products %}
+                 <a href="/product/{{cart_product.product_id}}">
             <div class="flex items-center h-fit w-full bg-primary px-4 py-2 rounded-md">
             <img src="/media/{{ cart_product.image }}" alt=""
             class="size-[70px] rounded-md">
@@ -147,6 +143,7 @@
                 </form>
             </div>
         </div>
+                 </a>
             {% empty %}
             <div class="flex flex-col justify-center items-center gap-4">
               <img src="https://media-public.canva.com/56ar4/MAEcWd56ar4/1/tl.png" alt="" class="size-[120px] mix-blend-overlay rotate-[-12deg]">

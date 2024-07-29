@@ -122,9 +122,31 @@ def products(request):
             products = Product.objects.filter(name__icontains=query)
         return render(request, 'products.html', {'all_products': products})
 
+
 @login_required()
 @customer_required
 def product_page(request, product_id):
+    if request.method == 'POST':
+        product_id = request.POST.get('productID')
+        remove = request.POST.get('remove')
+        cart = request.session.get('cart')
+        if cart:
+            quantity = cart.get(product_id)
+            if quantity:
+                if remove:
+                    if quantity == 1:
+                        cart.pop(product_id)
+                    else:
+                        cart[product_id] = quantity - 1
+                else:
+                    cart[product_id] = quantity + 1
+            else:
+                cart[product_id] = 1
+        else:
+            cart[product_id] = 1
+        request.session['cart'] = cart
+        return redirect('product_page', product_id)
+
     product = Product.objects.get(product_id=product_id)
     return render(request, 'ProductPage.html', {'product': product})
 
@@ -196,7 +218,6 @@ def checkout(request):
     cart_products_list = list(request.session.get('cart').keys())
     cart_products = Product.objects.filter(product_id__in=cart_products_list)
     return render(request, 'checkout.html', {'form': form, 'cart_products': cart_products})
-
 
 
 @login_required()
