@@ -1,16 +1,42 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="flex flex-col justify-center items-center h-[55vh]">
-    <img src="https://media-public.canva.com/wHsks/MAD2bcwHsks/2/tl.png" alt="" class="size-[60px] mx-auto">
-    <h1 class="font-bold text-[24px] text-text  text-center pt-6">Order Confirmed</h1>
-    <p class="text-text text-center">Your order has been confirmed. You will receive an email with the order details.</p>
-     {% if order_id %}
-        <a href="{% url 'generate_invoice_pdf' orderID=order_id %}">
-            <button>Download Invoice PDF</button>
-        </a>
-    {% endif %}
-    <a href="/products" class="text-primary bg-accent py-4 px-10 text-[18px] rounded-full mt-6 text-center">Continue Shopping</a>
+  <img
+    src="https://media-public.canva.com/wHsks/MAD2bcwHsks/2/tl.png"
+    alt=""
+    class="size-[60px] mx-auto"
+  />
+  <h1 class="font-bold text-[24px] text-text text-center pt-6">
+    Order Confirmed
+  </h1>
+  <p class="text-text text-center">
+    Your order has been confirmed. You will receive an email with the order
+    details.
+  </p>
+  {% if order_id %}
+  <!-- <a href="{% url 'generate_invoice_pdf' orderID=order_id %}"> -->
+    <button class="text-accent pt-4 hover:underline"
+    onclick="downloadInvoice()"
+    >
+      Download Invoice PDF
+    </button>
+  <!-- </a> -->
+  {% endif %}
+  <a
+    href="/products"
+    class="text-primary bg-accent py-3 px-14 text-[16px] rounded-full mt-6 text-center"
+    >Continue Shopping</a
+  >
 </div>
-{% endblock %}
 
+<script>
+    async function downloadInvoice() {
+        let orderID = "{{ order_id }}";
+        let generate_invoice_pdf = `/invoice/${orderID}/pdf/`;
+        let response = await fetch(generate_invoice_pdf);
+        let blob = await response.blob();
+        let url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        window.open('/', '_self');
+    }
+</script>
+{% endblock %}

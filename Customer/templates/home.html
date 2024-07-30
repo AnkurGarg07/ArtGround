@@ -1,165 +1,297 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-    {% load custom_filters %}
-    
-    <!-- Hero -->
-    <div
-      class="bg-[url({% static 'assets/hero-section-bg.png' %})] bg-center bg-cover flex w-full h-[340px] mt-[30px] rounded-[30px]"
-    >
-      <div class="mt-auto ml-[40px] mb-[40px]">
-        <span class="flex flex-col text-[40px] leading-snug">
-          <span class="text-text font-semibold">Your Digital</span>
-          <span class="text-accent font-bold">Auction Platform</span>
+{% extends "base.html" %} {% load static %} {% block content %} {% load custom_filters %}
+
+<!-- Hero -->
+<div
+  class="bg-[url({% static 'assets/hero-section-bg.png' %})] bg-center bg-cover flex w-full h-[340px] mt-[30px] rounded-[30px]"
+>
+  <div class="mt-auto ml-[40px] mb-[40px]">
+    <span class="flex flex-col text-[40px] leading-snug">
+      <span class="text-text font-semibold">Your Digital</span>
+      <span class="text-accent font-bold">Auction Platform</span>
+    </span>
+    <form class="homeForm" action="/#allProducts">
+      <span
+        class="flex bg-primary h-[50px] w-[140%] rounded-lg mt-6 items-center pl-4 border-solid border-[1px]"
+      >
+        <img src="../../static/assets/search-icon.svg" alt="" class="size-6" />
+        <span class="w-[1px] bg-secondary h-[60%] mx-[10px]"></span>
+        <input
+          type="text"
+          placeholder="Search for your favourite artworks"
+          class="search-input"
+          name="query"
+        />
+        <span class="flex h-full bg-accent rounded-lg text-primary">
+          <button type="submit" class="px-[40px]">Search</button>
         </span>
-        <form class="homeForm" action="/#allProducts">
-       <span
-          class="flex bg-primary h-[50px] w-[140%] rounded-lg mt-6 items-center pl-4 border-solid border-[1px]"
-        >
-          <img src="../../static/assets/search-icon.svg" alt="" class="size-6" />
-          <span class="w-[1px] bg-secondary h-[60%] mx-[10px]"></span>
-          <input
-            type="text"
-            placeholder="Search for your favourite artworks"
-            class="search-input"
-            name="query"
-          />
-           <span class="flex h-full bg-accent rounded-lg text-primary">
-              <button type="submit" class="px-[40px]">Search</button>
-          </span>
-        </span>
-          
-      </form>
-      </div>
-    </div>
-    <!-- Best Sellers -->
-    <div class="mt-[30px]">
-      <h1 class="font-bold text-[24px] text-text text-center">Best Sellers</h1>
-      <div class="grid grid-cols-5 gap-4 my-6 pb-4">
-        {% for item in best_products %}
-        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
-          <img src="{{item.image}}" alt="" class="w-full h-full object-cover rounded-xl" />
-          <div class="flex justify-between mt-2">
-            <div class="flex flex-col">
-              <span class="text-text font-semibold text-[18px]"
-                >{{item.title}}</span
-              >
-              <span class="text-secondary text-[12px]">{{item.owner}}</span>
-            </div>
-            <div class="text-accent font-semibold flex items-top">
-              <span class="text-[12px] mr-[1px]">₹</span>
-              <span class="text-[18px] font-bold">{{item.price}}</span>
-              <span class="text-[12px] ml-[1px]">00</span>
-            </div>
+      </span>
+    </form>
+  </div>
+</div>
+<!-- Best Sellers -->
+<div class="mt-[30px]">
+  <h1 class="font-bold text-[24px] text-text text-center">Best Sellers</h1>
+  <div class="grid grid-cols-5 gap-4 my-6 pb-4">
+    {% for item in best_products %}
+    <a href="/product/{{item.product_id}}">
+      <div
+        class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer"
+        title="{{ item.description }}"
+        id="{{ item.product_id }}"
+      >
+        <img
+          src="/media/{{ item.image }}"
+          alt=""
+          class="w-full h-full object-cover rounded-xl aspect-square"
+        />
+        <div class="flex justify-between mt-2">
+          <div class="flex flex-col">
+            <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ item.name }}"
+              >{{item.name}}</span
+            >
+            <span class="text-secondary text-[12px]">{{item.seller}}</span>
+            <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
           </div>
-          <div class="flex gap-2 w-full mt-4">
-                  <input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full h-full bg-accent rounded-full text-primary" type="submit">
+
+          <div class="text-accent font-semibold flex items-top">
+            <span class="text-[12px] mr-[1px]">₹</span>
+            <span class="text-[18px] font-bold">{{item.price}}</span>
+            <!-- <span class="text-[12px] ml-[1px]">00</span> -->
+          </div>
+        </div>
+        <div class="flex gap-2 w-full mt-4">
+          {# if products in cart are there#} {% if item|is_in_cart:request.session.cart %}
+          <div
+            class="w-full h-full text-text flex justify-between items-center border-solid border-[2px] rounded-full"
+          >
+            {% csrf_token %}
+            <form
+              method="POST"
+              class="h-full text-[20px] bg-accent rounded-s-full text-primary"
+              action="/#{{ item.product_id }}"
+            >
+              {% csrf_token %}
+              <input
+                type="text"
+                value="{{ item.product_id }}"
+                class="hidden"
+                name="productID"
+              />
+              <input type="text" value="True" class="hidden" name="remove" />
+              <button
+                class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary"
+                type="submit"
+              >
+                -
+              </button>
+            </form>
+            <div>{{ item|cart_quantity:request.session.cart }} in cart</div>
+            <form
+              method="POST"
+              class="h-full text-[20px] bg-accent rounded-e-full text-primary"
+              action="/#{{ item.product_id }}"
+            >
+              {% csrf_token %}
+              <input
+                type="text"
+                value="{{ item.product_id }}"
+                class="hidden"
+                name="productID"
+              />
+              <button
+                class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary"
+                type="submit"
+              >
+                +
+              </button>
+            </form>
+          </div>
+          {# if no products avaliable in cart#} {% else %}
+          <form class="w-full" method="POST" action="/#{{ item.product_id }}">
+            {% csrf_token %}
+            <input
+              type="text"
+              value="{{ item.product_id }}"
+              class="hidden"
+              name="productID"
+            />
+            <button
+              class="w-full h-full p-2 bg-accent rounded-full text-primary"
+              type="submit"
+            >
               Add to cart
-                  </button>
-            <button class="bg-secondary p-2 rounded-full">
+            </button>
+          </form>
+          {% endif %}
+
+          <!-- <button class="bg-secondary p-2 rounded-full">
               <img
                 src="../../static/assets/heart.svg"
                 alt=""
                 class="mix-blend-overlay"
               />
-            </button>
+            </button> -->
+        </div>
+      </div>
+    </a>
+    {% empty %} No Best Sellers {% endfor %}
+  </div>
+
+  <!-- All products -->
+  <h1
+    class="font-bold text-[24px] text-text border-t-2 border-secondary border-opacity-70 text-center pt-6"
+    id="allProducts"
+  >
+    More Products
+  </h1>
+  <div id="all-products" class="grid grid-cols-5 gap-4 my-6 pb-4">
+    {% for item in all_products %}
+    <a href="/product/{{item.product_id}}">
+      <div
+        class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer"
+        title="{{ item.description }}"
+        id="{{ item.product_id }}"
+      >
+        <img
+          src="/media/{{ item.image }}"
+          alt=""
+          class="w-full h-full object-cover rounded-xl aspect-square"
+        />
+        <div class="flex justify-between mt-2">
+          <div class="flex flex-col">
+            <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ item.name }}"
+              >{{item.name}}</span
+            >
+            <span class="text-secondary text-[12px]">{{item.seller}}</span>
+            <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
+          </div>
+
+          <div class="text-accent font-semibold flex items-top">
+            <span class="text-[12px] mr-[1px]">₹</span>
+            <span class="text-[18px] font-bold">{{item.price}}</span>
+            <!-- <span class="text-[12px] ml-[1px]">00</span> -->
           </div>
         </div>
-            {% empty %}
-            No best sellers
-        {% endfor %}
-      </div>
-    
-<!-- All products -->
-      <h1 class="font-bold text-[24px] text-text border-t-2 border-secondary border-opacity-70 text-center pt-6" id="allProducts">More Products</h1>
-      <div id="all-products" class="grid grid-cols-5 gap-4 my-6 pb-4">
-        {% for item in all_products %}
-        <a href="/product/{{item.product_id}}">
-        <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" title="{{ item.description }}" id="{{ item.product_id }}">
-          <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl aspect-square" />
-          <div class="flex justify-between mt-2">
-            <div class="flex flex-col">
-              <span class="text-text font-semibold text-[18px]"
-                >{{item.name}}</span
+        <div class="flex gap-2 w-full mt-4">
+          {# if products in cart are there#} {% if item|is_in_cart:request.session.cart %}
+          <div
+            class="w-full h-full text-text flex justify-between items-center border-solid border-[2px] rounded-full"
+          >
+            {% csrf_token %}
+            <form
+              method="POST"
+              class="h-full text-[20px] bg-accent rounded-s-full text-primary"
+              action="/#{{ item.product_id }}"
+            >
+              {% csrf_token %}
+              <input
+                type="text"
+                value="{{ item.product_id }}"
+                class="hidden"
+                name="productID"
+              />
+              <input type="text" value="True" class="hidden" name="remove" />
+              <button
+                class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary"
+                type="submit"
               >
-              <span class="text-secondary text-[12px]">{{item.seller}}</span>
-                <span class="text-secondary text-[12px]">Size-{{item.size}}</span>
-            </div>
-              
-            <div class="text-accent font-semibold flex items-top">
-              <span class="text-[12px] mr-[1px]">₹</span>
-              <span class="text-[18px] font-bold">{{item.price}}</span>
-              <span class="text-[12px] ml-[1px]">00</span>
-            </div>
+                -
+              </button>
+            </form>
+            <div>{{ item|cart_quantity:request.session.cart }} in cart</div>
+            <form
+              method="POST"
+              class="h-full text-[20px] bg-accent rounded-e-full text-primary"
+              action="/#{{ item.product_id }}"
+            >
+              {% csrf_token %}
+              <input
+                type="text"
+                value="{{ item.product_id }}"
+                class="hidden"
+                name="productID"
+              />
+              <button
+                class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary"
+                type="submit"
+              >
+                +
+              </button>
+            </form>
           </div>
-          <div class="flex gap-2 w-full mt-4">
-{#          if products in cart are there#}
-                  {% if item|is_in_cart:request.session.cart %}
-              <div class="w-full h-full text-text flex justify-between items-center border-solid border-[2px] rounded-full"  >
-                  {% csrf_token %}
-                  	 <form method="POST" class=" h-full text-[20px] bg-accent rounded-s-full text-primary" action="/#{{ item.product_id }}">
-                  {% csrf_token %}
-                  	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
-                         <input type="text" value="True" class="hidden" name="remove"/>
-                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">-</button>
-              </form>
-                  <div>{{ item|cart_quantity:request.session.cart }} in cart</div>
-                    <form method="POST" class=" h-full text-[20px] bg-accent rounded-e-full text-primary" action="/#{{ item.product_id }}">
-                  {% csrf_token %}
-                  	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">+</button>
-              </form>
-              </div>
-{#                      if no products avaliable in cart#}
-                      {% else %}
-                       <form class="w-full" method="POST" action="/#{{ item.product_id }}">
-                  {% csrf_token %}
-                  	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full h-full bg-accent rounded-full text-primary" type="submit">
+          {# if no products avaliable in cart#} {% else %}
+          <form class="w-full" method="POST" action="/#{{ item.product_id }}">
+            {% csrf_token %}
+            <input
+              type="text"
+              value="{{ item.product_id }}"
+              class="hidden"
+              name="productID"
+            />
+            <button
+              class="w-full h-full p-2 bg-accent rounded-full text-primary"
+              type="submit"
+            >
               Add to cart
-                  </button>
-              </form>
-                  {% endif %}
+            </button>
+          </form>
+          {% endif %}
 
-            <button class="bg-secondary p-2 rounded-full">
+          <!-- <button class="bg-secondary p-2 rounded-full">
               <img
                 src="../../static/assets/heart.svg"
                 alt=""
                 class="mix-blend-overlay"
               />
-            </button>
-          </div>
+            </button> -->
         </div>
-        </a>
-             {% empty %} No relevant data found
-        {% endfor %}
       </div>
-    </div>
+    </a>
+    {% empty %} No relevant data found {% endfor %}
+  </div>
+</div>
 
-{#    pagination#}
-    <nav class="flex justify-center">
+{# pagination#}
+<nav class="flex justify-center">
   <ul class="inline-flex -space-x-px text-sm">
-      {% if all_products.has_previous  %}
+    {% if all_products.has_previous %}
     <li>
-      <a href="/?page=1#allProducts" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 ">First</a>
+      <a
+        href="/?page=1#allProducts"
+        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700"
+        >First</a
+      >
     </li>
-      
+
     <li>
-      <a href="/?page={{ all_products.previous_page_number }}#allProducts" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Previous</a>
+      <a
+        href="/?page={{ all_products.previous_page_number }}#allProducts"
+        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >Previous</a
+      >
     </li>
-      {% endif %}
-    <li class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-        {{current_page}} of {{total_pages}} pages
+    {% endif %}
+    <li
+      class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+    >
+      {{current_page}} of {{total_pages}} pages
     </li>
-  {% if all_products.has_next %}
+    {% if all_products.has_next %}
     <li>
-      <a href="/?page={{all_products.next_page_number}}#allProducts" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">Next</a>
+      <a
+        href="/?page={{all_products.next_page_number}}#allProducts"
+        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >Next</a
+      >
     </li>
     <li>
-      <a href="/page={{ totalPages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-e-lg ">Last</a>
+      <a
+        href="/page={{ totalPages }}"
+        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-e-lg"
+        >Last</a
+      >
     </li>
-  {% endif %}
+    {% endif %}
   </ul>
 </nav>
 {% endblock %}

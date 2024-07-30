@@ -1,7 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.colors import HexColor, black
+
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -9,6 +16,7 @@ from Customer.models import shippingInfo
 from Account.decorators import customer_required
 from Customer.forms import shippingForm
 from Seller.models import Product, Order, OrderItem
+import random
 
 
 @login_required()
@@ -78,6 +86,8 @@ def home(request):
     #handling normal open of home page
     else:
         all_products = Product.objects.all()
+        best_products_limit = min(5, len(all_products))
+        best_products = random.sample(list(all_products), best_products_limit)
         query = request.GET.get('query')
         if query:
             all_products = Product.objects.filter(name__icontains=query)
@@ -241,56 +251,136 @@ def orderConfirmation(request):
 
 
 def generate_invoice(request, orderID):
+       # Retrieve order and shipping info
     order = get_object_or_404(Order, pk=orderID)
     shipping_info = get_object_or_404(shippingInfo, order=orderID)
-    response=HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="invoice_{order}.pdf"'
+
+    # Create a response object for PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_{orderID}.pdf"'
+
+    # Create a canvas
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
-    # Add title
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(50, height - 50, f"Invoice #{orderID}")
+
+    # Define styles and colors
+    title_font = "Helvetica-Bold"
+    regular_font = "Helvetica"
+    small_font = "Helvetica"
+    large_font_size = 16
+    regular_font_size = 12
+    small_font_size = 10
+    primary_color = HexColor('#333333')
+    secondary_color = HexColor('#555555')
+    accent_color = HexColor('#007BFF')
+
+    # Add company header
+    p.setFont(title_font, large_font_size)
+    p.setFillColor(primary_color)
+    p.drawString(50, height - 70, "ArtGround")
+
+    # Add logo
+    # img_url = "https://firebasestorage.googleapis.com/v0/b/sample-data-afa07.appspot.com/o/logo.png?alt=media&token=18139ddd-c08d-4c97-8ee6-c6c901e76bcd"
+    img_url = "logo.png"
+    img = ImageReader(img_url)
+    p.drawImage(img, x=width-150, y=height-70, height=30, width=100, mask='auto')
+
+    # Add address and contact information
+    # p.setFont(regular_font, small_font_size)
+    # p.setFillColor(secondary_color)
+    # p.drawString(50, height - 60, "123 Art Street, Creativity City, ART123")
+    # p.drawString(50, height - 75, "Email: contact@artground.com")
+    # p.drawString(50, height - 90, "Phone: +1 (234) 567-890")
+
+    # Add a separator line
+    p.setLineWidth(0.5)
+    p.setStrokeColor(secondary_color)
+    p.line(50, height - 100, width - 50, height - 100)
+
+    # # Add invoice title
+    # p.setFont(title_font, large_font_size)
+    # p.setFillColor(primary_color)
+    # p.drawString(50, height - 120, "Invoice")
+
     # Add order and customer information
-    p.setFont("Helvetica", 12)
-    p.drawString(50, height - 80, f"Date: {order.created_at.strftime('%Y-%m-%d')}")
-    p.drawString(50, height - 100, f"Customer: {shipping_info.first_name} {shipping_info.last_name}")
-    p.drawString(50, height - 120, f"Email: {shipping_info.email}")
-    p.drawString(50, height - 140, f"Phone: {shipping_info.phoneNumber}")
-    p.drawString(50, height - 160, "Shipping Address:")
-    p.drawString(70, height - 180, f"{shipping_info.address1}")
+    p.setFont(regular_font, regular_font_size)
+    p.drawString(50, height - 160, f"Invoice ID: {orderID}")
+    p.drawString(50, height - 180, f"Date: {order.created_at.strftime('%Y-%m-%d')}")
+    p.drawString(50, height - 200, f"Customer: {shipping_info.first_name} {shipping_info.last_name}")
+    p.drawString(50, height - 220, f"Email: {shipping_info.email}")
+    p.drawString(50, height - 240, f"Phone: {shipping_info.phoneNumber}")
+
+    # Add shipping address
+    p.drawString(50, height - 260, "Shipping Address:")
+    p.setFont(small_font, small_font_size)
+    p.setFillColor(secondary_color)
+    address_y = height - 280
+    p.drawString(70, address_y, f"{shipping_info.address1}")
     if shipping_info.address2:
-        p.drawString(70, height - 200, f"{shipping_info.address2}")
-        p.drawString(70, height - 220, f"{shipping_info.City}, {shipping_info.State}, {shipping_info.Country}")
-    else:
-        p.drawString(70, height - 200, f"{shipping_info.City}, {shipping_info.State}, {shipping_info.Country}")
-    p.drawString(50, height - 240, f"Postal Code: {shipping_info.zipCode}")
-    p.drawString(50, height - 260, f"Payment Method: {shipping_info.get_paymentType_display()}")
-    # Add order items
-    p.drawString(50, height - 300, "Order Items:")
-    p.drawString(70, height - 320, "Product")
-    p.drawString(270, height - 320, "Quantity")
-    p.drawString(370, height - 320, "Price")
-    p.drawString(470, height - 320, "Total")
-    y = height - 340
+        p.drawString(70, address_y - 20, f"{shipping_info.address2}")
+        address_y -= 20
+    p.drawString(70, address_y - 20, f"{shipping_info.City}, {shipping_info.State}, {shipping_info.Country}")
+    p.drawString(70, address_y - 40, f"Postal Code: {shipping_info.zipCode}")
+
+    # Add payment method
+    p.setFillColor(primary_color)
+    p.setFont(regular_font, regular_font_size)
+    p.drawString(50, address_y - 70, f"Payment Method: {shipping_info.get_paymentType_display()}")
+
+    # Add order items table
+    p.setFont(title_font, regular_font_size)
+    p.drawString(50, address_y - 100, "Order Items")
+
+    # Table headers
+    p.setFont(title_font, small_font_size)
+    p.setFillColor(black)
+    p.drawString(50, address_y - 120, "Product")
+    p.drawString(200, address_y - 120, "Quantity")
+    p.drawString(300, address_y - 120, "Price")
+    p.drawString(400, address_y - 120, "Total")
+
+    y = address_y - 140
     total_amount = 0
     order_items = order.order_items.all()
 
+    # Table rows
     if order_items.exists():
         for item in order_items:
-            p.drawString(70, y, f"{item.product.name}")
-            p.drawString(270, y, f"{item.quantity}")
-            p.drawString(370, y, f"Rs{item.price}")
+            p.setFont(regular_font, small_font_size)
+            p.setFillColor(secondary_color)
+            p.drawString(50, y, f"{item.product.name}")
+            p.drawString(200, y, f"{item.quantity}")
+            p.drawString(300, y, f"Rs{item.price}")
             total = item.quantity * item.price
-            p.drawString(470, y, f"Rs{total}")
+            p.drawString(400, y, f"Rs{total}")
             total_amount += total
             y -= 20
     else:
-        p.drawString(70, y, "No items found in the order.")
+        p.setFont(regular_font, regular_font_size)
+        p.setFillColor(primary_color)
+        p.drawString(50, y, "No items found in the order.")
 
+    # Add total amount
+    p.setFont(title_font, regular_font_size)
+    p.setFillColor(primary_color)
     p.drawString(50, y - 40, f"Total Amount: Rs{total_amount}")
+
+    # Add footer with company details
+    p.setLineWidth(0.5)
+    p.setStrokeColor(secondary_color)
+    p.line(50, 100, width - 50, 100)
+    p.setFont(regular_font, small_font_size)
+    p.setFillColor(secondary_color)
+    p.drawString(50, 70, "Thank you for Shopping!")
+    p.drawString(50, 55, "If you have any questions about this invoice, please contact us.")
+    p.drawString(50, 35, "ArtGround, India | contact@artground.com | +1 (234) 567-890")
+
+    # Finalize the PDF
     p.showPage()
     p.save()
+
     return response
+
 
 @login_required()
 @customer_required

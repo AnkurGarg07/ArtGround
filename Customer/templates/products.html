@@ -3,9 +3,10 @@
 {% block content %}
     {% load custom_filters %}
 	 <h1 class="font-bold text-[24px] text-text  text-center pt-6">All Products</h1>
+   <div class="grid grid-cols-[3fr_1fr] w-full gap-4 justify-center items-center mt-6">
       <form>
        <span
-          class="flex bg-primary h-[60px] w-[100%] rounded-lg mt-6 items-center pl-4 border-solid border-[1px]"
+          class="flex bg-primary h-[60px]  rounded-lg items-center pl-4 border-solid border-[1px]"
         >
           <img src="../../static/assets/search-icon.svg" alt="" class="size-8" />
           <span class="w-[1px] bg-secondary h-[60%] mx-[10px]"></span>
@@ -19,8 +20,30 @@
               <button type="submit" class="px-[40px]">Search</button>
           </span>
         </span>
-          
-      </form>
+        </form>
+        <div class="grid grid-cols-2 gap-2 h-full w-full">
+          <form action="" id="price-form" method="POST">
+          {% csrf_token %}
+          <select name="filter-price" id="filter-by-price" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
+            <option value="all">By Price</option>
+            <option value="1000">0-1000</option>
+            <option value="5000">1000-5000</option>
+            <option value="10000">5000-10000</option>
+            <option value="15000">15000+</option>
+          </select>
+          </form>
+          <form action="" id="size-form" method="POST">
+          {% csrf_token %}
+          <select name="filter-size" id="filter-by-size" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
+            <option value="all">By Size</option>
+            <option value="4x8">4x8</option>
+            <option value="8x10">8x10</option>
+            <option value="16x20">16x20</option>
+            <option value="24x30">24x30</option>
+          </select>
+          </form>
+        </div>
+      </div>
       <div class="grid grid-cols-5 gap-4 my-6 pb-4">
         {% for item in all_products %}
         <a href="/product/{{item.product_id}}">
@@ -28,7 +51,7 @@
           <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl aspect-square" />
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
-              <span class="text-text font-semibold text-[18px]"
+              <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ item.name }}"
                 >{{item.name}}</span
               >
               <span class="text-secondary text-[12px]">{{item.seller}}</span>
@@ -38,7 +61,7 @@
             <div class="text-accent font-semibold flex items-top">
               <span class="text-[12px] mr-[1px]">₹</span>
               <span class="text-[18px] font-bold">{{item.price}}</span>
-              <span class="text-[12px] ml-[1px]">00</span>
+              <!-- <span class="text-[12px] ml-[1px]">00</span> -->
             </div>
           </div>
           <div class="flex gap-2 w-full mt-4">
@@ -50,13 +73,13 @@
                   {% csrf_token %}
                   	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
                          <input type="text" value="True" class="hidden" name="remove"/>
-                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">-</button>
+                  <button class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary" type="submit">-</button>
               </form>
-                  <div>{{ item|cart_quantity:request.session.cart }} in cart</div>
+                  <div >{{ item|cart_quantity:request.session.cart }} in cart</div>
                     <form method="POST" class=" h-full text-[20px] bg-accent rounded-e-full text-primary" action="/products/#{{ item.product_id }}">
                   {% csrf_token %}
                   	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">+</button>
+                  <button class="w-full px-[15px] h-full bg-accent p-1 rounded-full text-primary" type="submit">+</button>
               </form>
               </div>
 {#                      if no products avaliable in cart#}
@@ -64,19 +87,19 @@
                        <form class="w-full" method="POST" action="/products/#{{ item.product_id }}">
                   {% csrf_token %}
                   	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full h-full bg-accent rounded-full text-primary" type="submit">
+                  <button class="w-full h-full bg-accent rounded-full p-2 text-primary" type="submit">
               Add to cart
                   </button>
               </form>
                   {% endif %}
 
-            <button class="bg-secondary p-2 rounded-full">
+            <!-- <button class="bg-secondary p-2 rounded-full">
               <img
                 src="../../static/assets/heart.svg"
                 alt=""
                 class="mix-blend-overlay"
               />
-            </button>
+            </button> -->
           </div>
         </div>
         </a>
@@ -84,4 +107,17 @@
         {% endfor %}
       </div>
     </div>
+
+    <script>
+      const filterByPrice = document.getElementById('filter-by-price');
+      const filterBySize = document.getElementById('filter-by-size');
+      filterByPrice.addEventListener('change', (e) => {
+        e.preventDefault();
+        document.getElementById('price-form').submit();
+      });
+      filterBySize.addEventListener('change', (e) => {
+        e.preventDefault();
+        document.getElementById('size-form').submit();
+      });
+    </script>
 {% endblock %}

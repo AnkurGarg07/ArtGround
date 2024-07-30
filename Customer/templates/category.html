@@ -11,7 +11,7 @@
           <img src="/media/{{ painting.image }}" alt="" class="w-full h-full object-cover rounded-xl aspect-square" />
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
-              <span class="text-text font-semibold text-[18px]" 
+              <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ painting.name }}"
                 >{{painting.name}}</span
               >
               <span class="text-secondary text-[12px]">{{painting.seller}}</span>
@@ -20,7 +20,7 @@
             <div class="text-accent font-semibold flex items-top">
               <span class="text-[12px] mr-[1px]">₹</span>
               <span class="text-[18px] font-bold">{{painting.price}}</span>
-              <span class="text-[12px] ml-[1px]">00</span>
+              <!-- <span class="text-[12px] ml-[1px]">00</span> -->
             </div>
           </div>
           <div class="flex gap-2 w-full mt-4">
@@ -32,13 +32,13 @@
                   {% csrf_token %}
                   	<input type="text" value="{{ painting.product_id }}" class="hidden" name="productID"/>
                          <input type="text" value="True" class="hidden" name="remove"/>
-                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">-</button>
+                  <button class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary" type="submit">-</button>
               </form>
                   <div>{{ painting|cart_quantity:request.session.cart }} in cart</div>
                     <form method="POST" class=" h-full text-[20px] bg-accent rounded-e-full text-primary" action="/category/#{{ painting.product_id }}">
                   {% csrf_token %}
                   	<input type="text" value="{{ painting.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full px-[15px] h-full bg-accent rounded-full text-primary" type="submit">+</button>
+                  <button class="w-full px-[15px] p-1 h-full bg-accent rounded-full text-primary" type="submit">+</button>
               </form>
               </div>
 {#                      if no products avaliable in cart#}
@@ -46,19 +46,19 @@
                        <form class="w-full" method="POST" action="/category/#{{ painting.product_id }}">
                   {% csrf_token %}
                   	<input type="text" value="{{ painting.product_id }}" class="hidden" name="productID"/>
-                  <button class="w-full h-full bg-accent rounded-full text-primary" type="submit">
+                  <button class="w-full h-full p-2 bg-accent rounded-full text-primary" type="submit">
               Add to cart
                   </button>
               </form>
                   {% endif %}
 
-            <button class="bg-secondary p-2 rounded-full">
+            <!-- <button class="bg-secondary p-2 rounded-full">
               <img
                 src="../../static/assets/heart.svg"
                 alt=""
                 class="mix-blend-overlay"
               />
-            </button>
+            </button> -->
           </div>
         </div>
         </a>
