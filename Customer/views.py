@@ -261,6 +261,7 @@ def generate_invoice(request, orderID):
 
     # Create a canvas
     p = canvas.Canvas(response, pagesize=letter)
+    p.setTitle(f"Invoice {orderID}") 
     width, height = letter
 
     # Define styles and colors
