@@ -1,13 +1,12 @@
 from django.contrib import messages
-from django.shortcuts import render
-
-# Create your views here.
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 from django.core.paginator import Paginator
-from Account.decorators import customer_required, seller_required
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from Customer.models import shippingInfo
+from Account.decorators import customer_required
 from Customer.forms import shippingForm
 from Seller.models import Product, Order, OrderItem
 
@@ -231,14 +230,67 @@ def orderConfirmation(request):
             OrderItem.objects.create(order=order, product=product, quantity=quantity, price=product.price)
         form = shippingForm(request.POST)
         if form.is_valid():
-            shippingInfo = form.save(commit=False)
-            shippingInfo.customer = request.user.customer
-            shippingInfo.order = order
-            shippingInfo.save()
-            messages.success(request, 'Your shipping has been done!')
-        request.session['cart'] = {}
-        return render(request, 'orderConfirm.html')
+            shipping_info = form.save(commit=False)
+            shipping_info.customer = request.user.customer
+            shipping_info.order = order
+            shipping_info.save()
+            messages.success(request, 'Your order has been placed successfully!')
+            request.session['cart'] = {}
+            return render(request, 'orderConfirm.html', {'order_id': order.order_id})
+    return redirect('products')
 
+
+def generate_invoice(request, orderID):
+    order = get_object_or_404(Order, pk=orderID)
+    shipping_info = get_object_or_404(shippingInfo, order=orderID)
+    response=HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_{order}.pdf"'
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+    # Add title
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, height - 50, f"Invoice #{orderID}")
+    # Add order and customer information
+    p.setFont("Helvetica", 12)
+    p.drawString(50, height - 80, f"Date: {order.created_at.strftime('%Y-%m-%d')}")
+    p.drawString(50, height - 100, f"Customer: {shipping_info.first_name} {shipping_info.last_name}")
+    p.drawString(50, height - 120, f"Email: {shipping_info.email}")
+    p.drawString(50, height - 140, f"Phone: {shipping_info.phoneNumber}")
+    p.drawString(50, height - 160, "Shipping Address:")
+    p.drawString(70, height - 180, f"{shipping_info.address1}")
+    if shipping_info.address2:
+        p.drawString(70, height - 200, f"{shipping_info.address2}")
+        p.drawString(70, height - 220, f"{shipping_info.City}, {shipping_info.State}, {shipping_info.Country}")
+    else:
+        p.drawString(70, height - 200, f"{shipping_info.City}, {shipping_info.State}, {shipping_info.Country}")
+    p.drawString(50, height - 240, f"Postal Code: {shipping_info.zipCode}")
+    p.drawString(50, height - 260, f"Payment Method: {shipping_info.get_paymentType_display()}")
+    # Add order items
+    p.drawString(50, height - 300, "Order Items:")
+    p.drawString(70, height - 320, "Product")
+    p.drawString(270, height - 320, "Quantity")
+    p.drawString(370, height - 320, "Price")
+    p.drawString(470, height - 320, "Total")
+    y = height - 340
+    total_amount = 0
+    order_items = order.order_items.all()
+
+    if order_items.exists():
+        for item in order_items:
+            p.drawString(70, y, f"{item.product.name}")
+            p.drawString(270, y, f"{item.quantity}")
+            p.drawString(370, y, f"Rs{item.price}")
+            total = item.quantity * item.price
+            p.drawString(470, y, f"Rs{total}")
+            total_amount += total
+            y -= 20
+    else:
+        p.drawString(70, y, "No items found in the order.")
+
+    p.drawString(50, y - 40, f"Total Amount: Rs{total_amount}")
+    p.showPage()
+    p.save()
+    return response
 
 @login_required()
 @customer_required
