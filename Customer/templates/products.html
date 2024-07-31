@@ -109,5 +109,13 @@
         e.preventDefault();
         document.getElementById('size-form').submit();
       });
+
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const price = urlParams.get('filter_price');
+        const size = urlParams.get('filter_size');
+        if(price) filterByPrice.value = price;
+        if(size) filterBySize.value = size;
+      });
     </script>
 {% endblock %}

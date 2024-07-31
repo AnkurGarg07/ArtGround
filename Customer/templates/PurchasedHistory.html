@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="border-product">
   <h1 class="text-text text-2xl font-bold py-4">Purchased History</h1>
   <div class="w-full flex flex-col">
@@ -7,16 +6,17 @@
       <table class="w-full overflow-x-auto font-[Montserrat]">
         <thead>
           <tr class="text-center border-b-2 font-[Montserrat]">
-              <th class="text-left py-4 mb-4">Product Image</th>
-              <th>Order ID</th>
-              <th class="text-left">Product Name</th>
-              <th>Date</th>
-              <th>Price</th>
+            <th class="text-left">Order ID</th>
+            <th class="text-left py-4 mb-4">Product Image</th>
+            <th class="text-left">Product Name</th>
+            <th>Date</th>
+            <th>Price</th>
           </tr>
         </thead>
         {% for order_item in purchase_history %}
-            <tr class="text-center hover:bg-product border-b-2 font-[Montserrat]">
-                <td class="p-2 mx-auto w-[20%]">
+        <tr class="text-center hover:bg-product border-b-2 font-[Montserrat]">
+          <td class="w-[15%] text-left">{{order_item.order.order_id}}</td>
+          <td class="p-2 mx-auto w-[20%]">
             <a
               href="/media/{{order_item.product.image}}"
               target="_blank"
@@ -29,10 +29,9 @@
               />
             </a>
           </td>
-                <td class="w-[15%]">{{order_item.order.order_id}}</td>
-                <td class="w-[30%] text-left">{{order_item.product.name}}</td>
-                <td class="w-[15%]">{{order_item.order.created_at}}</td>
-                <td class="w-[15%]">₹{{order_item.product.price}}</td>
+          <td class="w-[30%] text-left">{{order_item.product.name}}</td>
+          <td class="w-[15%]">{{order_item.order.created_at}}</td>
+          <td class="w-[15%]">₹{{order_item.product.price}}</td>
         </tr>
         {% endfor %}
       </table>

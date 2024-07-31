@@ -7,12 +7,16 @@
     <title>Total Sales</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     {% tailwind_css %}
   </head>
   <body
     class="bg-primary px-[60px] w-[100vw] overflow-x-hidden font-[Montserrat]"
   >
-    <div class="border-product">
+    <div class="border-product font-[Montserrat]">
       {% include 'sellerNavbar.html' %}
       <h1 class="text-text text-2xl font-bold py-4">Total Sales</h1>
       <div class="w-full flex flex-col">

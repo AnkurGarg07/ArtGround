@@ -11,5 +11,5 @@ urlpatterns = [
     # path('checkoutHandle', views.checkoutHandle, name='checkoutHandle'),
     path('orderConfirmation/', views.orderConfirmation, name='orderConfirmation'),
     path('invoice/<str:orderID>/pdf/', views.generate_invoice, name='generate_invoice_pdf'),
-    path('PurchasedHistory/', views.PurchasedHistory, name='PurchasedHistory'),
+    path('Orders/', views.OrdersHistory, name='Orders'),
 ]

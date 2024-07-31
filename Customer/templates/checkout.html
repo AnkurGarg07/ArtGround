@@ -10,12 +10,29 @@
     <link rel="stylesheet" href="../../static/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
 </head>
-<body class="bg-primary px-[60px] w-[100vw] overflow-x-hidden font-Montserrat">
+<body class="relative bg-primary px-[60px] w-[100vw] overflow-x-hidden font-Montserrat" id="checkout-body">
+  <!-- COUPON POPUP -->
+<div class="absolute top-0 left-0 w-[100vw] h-[100vh] justify-center items-center bg-secondary bg-opacity-70 z-[99999999] overflow-hidden hidden" id="coupon-popup">
+  <div class="bg-primary relative flex flex-col gap-3 w-[400px] h-[350px] p-10 rounded-lg justify-between items-center">
+    <button class="absolute top-6 right-6" id="coupon-close"><img src="https://media-public.canva.com/fQLyM/MAEnIMfQLyM/1/tl.png" alt="" class="size-4 opacity-50"></button>
+    <div class="flex">
+    <span class="mx-auto border-2 p-4 rounded-full bg-secondary">
+      <img src="https://media-public.canva.com/5QC9Y/MAFC4u5QC9Y/1/tl.png" alt="" class="size-[60px] mix-blend-overlay">
+    </span>
+    </div>
+    <h1 class="font-semibold text-text text-lg">Enter Coupon Code</h1>
+    <span class="grid grid-cols-1 w-full gap-3">
+      {% render_field coupon.code placeholder="Enter Coupon Code" class="uppercase w-full outline-none border-none rounded-md p-3 bg-slate-200" %}
+      <button id="applyCoupon" class="bg-accent text-primary p-2 rounded-md font-medium">APPLY</button>
+    </span>
+  </div>
+</div>
 {% include 'navbar.html' %}
 <div class="flex justify-center w-full items-center">
 
@@ -94,7 +111,7 @@
         <div class="grid grid-cols-3 gap-2">
             {% for payment_method in form.paymentType %}
           <span class="flex bg-primary p-4 items-center gap-2 cursor-pointer rounded-md font-semibold text-text border-2 border-primary"
-              onclick="SelectPaymentMethod('{{ payment_method.id }}')">
+              onclick="SelectPaymentMethod('{{ payment_method.choice_label }}')">
               {% render_field payment_method.tag %}
               {% if payment_method.choice_label == 'Bank Transfer' %}
               <img src="https://cdn-icons-png.flaticon.com/512/1018/1018197.png" alt="" class="size-6">
@@ -155,7 +172,7 @@
        </div>
     </div>
   {% if cart_products %}
-    <div class="h-[30%] gap-6 absolute bottom-0 w-full grid grid-cols-1 mx-auto p-[20px] bg-primary rounded-t-2xl border-2">
+    <div class="h-[30%] gap-4 absolute bottom-0 w-full grid grid-cols-1 mx-auto p-[20px] bg-primary rounded-t-2xl border-2">
         <div class="w-full grid grid-cols-1 font-semibold">
             <span class="flex justify-between">
                 <span>Subtotal</span>
@@ -169,6 +186,9 @@
                 <span>Taxes</span>
 
                 <span class="text-[#D92020]">₹ {{ cart_products|get_tax:request.session.cart }}</span>
+            </span>
+            <span class="text-accent flex justify-end w-full">
+              <button class="ml-auto pt-1" id="coupon-btn">Have a Coupon Code?</button>
             </span>
         </div>
         <div class="grid grid-cols-2 bg-text text-primary justify-center items-center p-[15px] rounded-lg">
@@ -274,21 +294,16 @@
   }
 });
 
-function SelectPaymentMethod(type){
-    console.log(type);
-    let Type = document.getElementById(type);
-    methods = ['bank_transfer', 'card', 'upi'];
-    methods.forEach(function(method){
-        if(method !== type){
-            let otherMethod = document.getElementById(method);
-            otherMethod.checked = false;
-            otherMethod.parentElement.classList.remove('border-accent');
-        }else{
-            Type.parentElement.classList.add('border-accent');
-            Type.checked = true;
-        }
-    });
-}
+document.getElementById('coupon-btn').addEventListener('click', function(){
+  document.getElementById('checkout-body').style.overflow = 'hidden';
+  document.getElementById('coupon-popup').style.display = 'flex';
+});
+
+document.getElementById('coupon-close').addEventListener('click', function(){
+  document.getElementById('checkout-body').style.overflowX = 'hidden';
+  document.getElementById('checkout-body').style.overflowY = 'auto';
+  document.getElementById('coupon-popup').style.display = 'none';
+});
 
 </script>
 </body>

@@ -340,7 +340,7 @@ def generate_invoice(request, orderID):
 
 @login_required()
 @customer_required
-def PurchasedHistory(request):
+def OrdersHistory(request):
     order_items = []
     current_user_orders = Order.objects.filter(user=request.user)
     for order in current_user_orders:
