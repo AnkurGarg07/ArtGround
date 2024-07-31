@@ -56,11 +56,11 @@
           <div class="text-accent font-semibold flex items-top">
             <span class="text-[12px] mr-[1px]">₹</span>
             <span class="text-[18px] font-bold">{{item.price}}</span>
-            <!-- <span class="text-[12px] ml-[1px]">00</span> -->
           </div>
         </div>
         <div class="flex gap-2 w-full mt-4">
-          {# if products in cart are there#} {% if item|is_in_cart:request.session.cart %}
+          <!--if products in cart are there-->
+            {% if item|is_in_cart:request.session.cart %}
           <div
             class="w-full h-full text-text flex justify-between items-center border-solid border-[2px] rounded-full"
           >
@@ -106,7 +106,8 @@
               </button>
             </form>
           </div>
-          {# if no products avaliable in cart#} {% else %}
+          <!-- if no products avaliable in cart-->
+            {% else %}
           <form class="w-full" method="POST" action="/#{{ item.product_id }}">
             {% csrf_token %}
             <input
@@ -123,14 +124,6 @@
             </button>
           </form>
           {% endif %}
-
-          <!-- <button class="bg-secondary p-2 rounded-full">
-              <img
-                src="../../static/assets/heart.svg"
-                alt=""
-                class="mix-blend-overlay"
-              />
-            </button> -->
         </div>
       </div>
     </a>
@@ -169,11 +162,11 @@
           <div class="text-accent font-semibold flex items-top">
             <span class="text-[12px] mr-[1px]">₹</span>
             <span class="text-[18px] font-bold">{{item.price}}</span>
-            <!-- <span class="text-[12px] ml-[1px]">00</span> -->
           </div>
         </div>
         <div class="flex gap-2 w-full mt-4">
-          {# if products in cart are there#} {% if item|is_in_cart:request.session.cart %}
+          <!-- if products in cart are there-->
+            {% if item|is_in_cart:request.session.cart %}
           <div
             class="w-full h-full text-text flex justify-between items-center border-solid border-[2px] rounded-full"
           >
@@ -219,7 +212,8 @@
               </button>
             </form>
           </div>
-          {# if no products avaliable in cart#} {% else %}
+          <!-- if no products avaliable in cart-->
+            {% else %}
           <form class="w-full" method="POST" action="/#{{ item.product_id }}">
             {% csrf_token %}
             <input
@@ -236,14 +230,6 @@
             </button>
           </form>
           {% endif %}
-
-          <!-- <button class="bg-secondary p-2 rounded-full">
-              <img
-                src="../../static/assets/heart.svg"
-                alt=""
-                class="mix-blend-overlay"
-              />
-            </button> -->
         </div>
       </div>
     </a>
@@ -251,7 +237,7 @@
   </div>
 </div>
 
-{# pagination#}
+<!-- pagination-->
 <nav class="flex justify-center">
   <ul class="inline-flex -space-x-px text-sm">
     {% if all_products.has_previous %}

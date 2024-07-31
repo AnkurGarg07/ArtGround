@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,15 @@ INSTALLED_APPS = [
     'Seller',
     'Customer'
 ]
+
+JAZZMIN_SETTINGS = {
+    'site_title': 'ArtGround',
+    'site_header': 'ArtGround ',
+    'site_brand': 'Admin',
+    'site_logo': 'images/logo.png',
+    'welcome_sign': 'Welcome to ArtGround!',
+    'copyright':'Art ground'
+}
 TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",

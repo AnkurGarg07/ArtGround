@@ -6,7 +6,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{product.name}}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../static/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,24 +13,7 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: "#FFFBFC",
-              secondary: "#ADB9D1",
-              accent: "#4A68A9",
-              text: "#32384A",
-              product: "#ECEDEF",
-            },
-          },
-        },
-      };
-    </script>
-
-    {% tailwind_css %}
+      {% tailwind_css %}
   </head>
   <body class="bg-primary px-[60px] overflow-x-hidden">
     {% include 'navbar.html' %}
@@ -47,9 +29,7 @@
         <h1 class="text-[35px] text-text font-bold">{{product.name}}</h1>
         <h2 class="text-[20px] text-secondary font-semibold">{{product.seller}}</h2>
         <h3 class="text-[14px] text-secondary w-fit px-4 py-1 rounded-md bg-accent font-semibold">{{product.size}}</h3>
-        <p class="text-[18px] text-text mt-5">{{product.description}}
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. At reprehenderit iste voluptatum esse exercitationem, nemo ducimus ipsa ut, voluptates consequuntur dolore dolor autem ipsam vero laborum quaerat omnis quibusdam explicabo velit. Ipsam id nihil itaque cupiditate doloremque aliquid rem, rerum repudiandae sequi corrupti error dolor at facilis optio odit sunt?
-        </p>
+        <p class="text-[18px] text-text mt-5">{{product.description}}</p>
         <div class="flex gap-4 mt-5 text-[30px] text-text font-bold">
          ₹{{product.price}}
       </div>
@@ -71,7 +51,7 @@
                   <button class="w-full px-[25px] h-full bg-accent rounded-full text-primary" type="submit">+</button>
               </form>
               </div>
-{#                      if no products avaliable in cart#}
+{#                      if no products available in cart#}
                       {% else %}
                        <form class="w-full" method="POST" action="/product/{{ product.product_id }}">
                   {% csrf_token %}
@@ -81,17 +61,9 @@
                   </button>
               </form>
                   {% endif %}
-
-            <!-- <button class="bg-secondary p-2 rounded-full">
-              <img
-                src="../../static/assets/heart.svg"
-                alt=""
-                class="mix-blend-overlay"
-              />
-            </button> -->
           </div>
 
     </div>
-    <!-- {{ product.name }} {{ product.price }} {{ product.seller }} {{ product.size }} {{ product.description }} {{ product.image }} -->
+    </div>
   </body>
 </html>

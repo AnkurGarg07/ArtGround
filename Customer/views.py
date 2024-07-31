@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import letter
@@ -8,13 +7,12 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.colors import HexColor, black
-
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from Customer.models import shippingInfo
 from Account.decorators import customer_required
-from Customer.forms import shippingForm
+from Customer.forms import shippingForm, couponForm
 from Seller.models import Product, Order, OrderItem
 import random
 
@@ -22,45 +20,6 @@ import random
 @login_required()
 @customer_required
 def home(request):
-    # print(request.session['cart'])
-    best_products = [
-        {
-            id: 1,
-            'image': "../../static/assets/products/product-1.png",
-            'title': "Vintage Car",
-            'owner': "Digiland Art Sage",
-            'price': "449",
-        },
-        {
-            id: 2,
-            'image': "../../static/assets/products/product-2.png",
-            'title': "Long Head Birds",
-            'owner': "Inkset Painter",
-            'price': "899",
-        },
-        {
-            id: 3,
-            'image': "../../static/assets/products/product-3.png",
-            'title': "3D Flower Pot",
-            'owner': "The 3D World",
-            'price': "1299",
-        },
-        {
-            id: 4,
-            'image': "../../static/assets/products/product-4.png",
-            'title': "The Horse Rider",
-            'owner': "OilyHands",
-            'price': "999",
-        },
-        {
-            id: 5,
-            'image': "../../static/assets/products/product-1.png",
-            'title': "Vintage Car",
-            'owner': "Digiland Art Sage",
-            'price': "449",
-        },
-    ]
-    #handling if product is added
     if request.method == 'POST':
         product_id = request.POST.get('productID')
         remove = request.POST.get('remove')
@@ -78,8 +37,7 @@ def home(request):
             else:
                 cart[product_id] = 1
         else:
-            cart = {}
-            cart[product_id] = 1
+            cart = {product_id: 1}
         request.session['cart'] = cart
         return redirect('home')
 
@@ -87,7 +45,7 @@ def home(request):
     else:
         all_products = Product.objects.all()
         best_products_limit = min(5, len(all_products))
-        best_products = random.sample(list(all_products), best_products_limit)
+        best_products = Product.objects.all()[:5]
         query = request.GET.get('query')
         if query:
             all_products = Product.objects.filter(name__icontains=query)
@@ -120,16 +78,28 @@ def products(request):
             else:
                 cart[product_id] = 1
         else:
-            cart = {}
-            cart[product_id] = 1
+            cart = {product_id: 1}
         request.session['cart'] = cart
         return redirect('products')
     else:
-        products = Product.objects.all()
+        all_products = Product.objects.all()
         query = request.GET.get('query')
+        filter_price = request.GET.get('filter_price')
+        filter_size = request.GET.get('filter_size')
         if query:
-            products = Product.objects.filter(name__icontains=query)
-        return render(request, 'products.html', {'all_products': products})
+            all_products = Product.objects.filter(name__icontains=query)
+        if filter_price and filter_price != 'all':
+            if filter_price == '0':
+                all_products = Product.objects.filter(price__range=(0, 1000))
+            elif filter_price == '1000':
+                all_products = Product.objects.filter(price__range=(1000, 5000))
+            elif filter_price == '5000':
+                all_products = Product.objects.filter(price__range=(5000, 10000))
+            elif filter_price == '10000':
+                all_products = Product.objects.filter(price__gte=10000)
+        if filter_size and filter_size != 'all':
+            all_products = Product.objects.filter(size=filter_size)
+        return render(request, 'products.html', {'all_products': all_products})
 
 
 @login_required()
@@ -180,10 +150,8 @@ def category(request):
             else:
                 cart[product_id] = 1
         else:
-            cart = {}
-            cart[product_id] = 1
+            cart = {product_id: 1}
         request.session['cart'] = cart
-        print(request.session['cart'])
         return redirect('category')
     # fetching products according to category
     else:
@@ -224,9 +192,10 @@ def checkout(request):
             request.session['cart'] = cart
             return redirect('checkout')
     form = shippingForm()
+    coupon=couponForm()
     cart_products_list = list(request.session.get('cart').keys())
     cart_products = Product.objects.filter(product_id__in=cart_products_list)
-    return render(request, 'checkout.html', {'form': form, 'cart_products': cart_products})
+    return render(request, 'checkout.html', {'form': form, 'cart_products': cart_products,'coupon':coupon})
 
 
 @login_required()
@@ -244,14 +213,13 @@ def orderConfirmation(request):
             shipping_info.customer = request.user.customer
             shipping_info.order = order
             shipping_info.save()
-            messages.success(request, 'Your order has been placed successfully!')
             request.session['cart'] = {}
             return render(request, 'orderConfirm.html', {'order_id': order.order_id})
     return redirect('products')
 
 
 def generate_invoice(request, orderID):
-       # Retrieve order and shipping info
+    # Retrieve order and shipping info
     order = get_object_or_404(Order, pk=orderID)
     shipping_info = get_object_or_404(shippingInfo, order=orderID)
 
@@ -261,7 +229,7 @@ def generate_invoice(request, orderID):
 
     # Create a canvas
     p = canvas.Canvas(response, pagesize=letter)
-    p.setTitle(f"Invoice {orderID}") 
+    p.setTitle(f"Invoice {orderID}")
     width, height = letter
 
     # Define styles and colors
@@ -281,27 +249,14 @@ def generate_invoice(request, orderID):
     p.drawString(50, height - 70, "ArtGround")
 
     # Add logo
-    # img_url = "https://firebasestorage.googleapis.com/v0/b/sample-data-afa07.appspot.com/o/logo.png?alt=media&token=18139ddd-c08d-4c97-8ee6-c6c901e76bcd"
     img_url = "logo.png"
     img = ImageReader(img_url)
-    p.drawImage(img, x=width-150, y=height-70, height=30, width=100, mask='auto')
-
-    # Add address and contact information
-    # p.setFont(regular_font, small_font_size)
-    # p.setFillColor(secondary_color)
-    # p.drawString(50, height - 60, "123 Art Street, Creativity City, ART123")
-    # p.drawString(50, height - 75, "Email: contact@artground.com")
-    # p.drawString(50, height - 90, "Phone: +1 (234) 567-890")
+    p.drawImage(img, x=width - 150, y=height - 70, height=30, width=100, mask='auto')
 
     # Add a separator line
     p.setLineWidth(0.5)
     p.setStrokeColor(secondary_color)
     p.line(50, height - 100, width - 50, height - 100)
-
-    # # Add invoice title
-    # p.setFont(title_font, large_font_size)
-    # p.setFillColor(primary_color)
-    # p.drawString(50, height - 120, "Invoice")
 
     # Add order and customer information
     p.setFont(regular_font, regular_font_size)
@@ -386,87 +341,9 @@ def generate_invoice(request, orderID):
 @login_required()
 @customer_required
 def PurchasedHistory(request):
-    product_purchased = [
-        {
-            'id': 1,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 2,
-            'image': "http://127.0.0.1:8000/media/product_images/IMG-20240629-WA0010.jpg",
-            'title': "Long Head Birds",
-            'price': "899",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 3,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "3D Flower Pot",
-            'price': "1299",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 4,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "The Horse Rider",
-            'price': "999",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 5,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 1,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 2,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Long Head Birds",
-            'price': "899",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 3,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "3D Flower Pot",
-            'price': "1299",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 4,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "The Horse Rider",
-            'price': "999",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-        {
-            'id': 5,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'invoice': "/"
-        },
-    ]
+    order_items = []
+    current_user_orders = Order.objects.filter(user=request.user)
+    for order in current_user_orders:
+        order_items = order.order_items.all()
 
-    return render(request, 'PurchasedHistory.html', {'purchase_history': product_purchased})
+    return render(request, 'PurchasedHistory.html', {'purchase_history': order_items})

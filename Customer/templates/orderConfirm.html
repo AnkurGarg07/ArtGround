@@ -13,13 +13,11 @@
     details.
   </p>
   {% if order_id %}
-  <!-- <a href="{% url 'generate_invoice_pdf' orderID=order_id %}"> -->
-    <button class="text-accent pt-4 hover:underline"
-    onclick="downloadInvoice()"
-    >
+   <a href="{% url 'generate_invoice_pdf' orderID=order_id %}">
+    <button class="text-accent pt-4 hover:underline">
       Download Invoice PDF
     </button>
-  <!-- </a> -->
+  </a>
   {% endif %}
   <a
     href="/products"
@@ -28,15 +26,4 @@
   >
 </div>
 
-<script>
-    async function downloadInvoice() {
-        let orderID = "{{ order_id }}";
-        let generate_invoice_pdf = `/invoice/${orderID}/pdf/`;
-        let response = await fetch(generate_invoice_pdf);
-        let blob = await response.blob();
-        let url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        window.open('/', '_self');
-    }
-</script>
 {% endblock %}

@@ -22,19 +22,17 @@
         </span>
         </form>
         <div class="grid grid-cols-2 gap-2 h-full w-full">
-          <form action="" id="price-form" method="POST">
-          {% csrf_token %}
-          <select name="filter-price" id="filter-by-price" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
+          <form action="" id="price-form" >
+          <select name="filter_price" id="filter-by-price" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
             <option value="all">By Price</option>
-            <option value="1000">0-1000</option>
-            <option value="5000">1000-5000</option>
-            <option value="10000">5000-10000</option>
-            <option value="15000">15000+</option>
+            <option value="0">0-1000</option>
+            <option value="1000">1000-5000</option>
+            <option value="5000">5000-10000</option>
+            <option value="10000">10000+</option>
           </select>
           </form>
-          <form action="" id="size-form" method="POST">
-          {% csrf_token %}
-          <select name="filter-size" id="filter-by-size" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
+          <form action="" id="size-form" >
+          <select name="filter_size" id="filter-by-size" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
             <option value="all">By Size</option>
             <option value="4x8">4x8</option>
             <option value="8x10">8x10</option>
@@ -46,9 +44,11 @@
       </div>
       <div class="grid grid-cols-5 gap-4 my-6 pb-4">
         {% for item in all_products %}
-        <a href="/product/{{item.product_id}}">
+
         <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" title="{{ item.description }}" id="{{ item.product_id }}">
-          <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl aspect-square" />
+          <a href="/product/{{item.product_id}}">
+            <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl aspect-square" />
+          </a>
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
               <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ item.name }}"
@@ -61,7 +61,6 @@
             <div class="text-accent font-semibold flex items-top">
               <span class="text-[12px] mr-[1px]">₹</span>
               <span class="text-[18px] font-bold">{{item.price}}</span>
-              <!-- <span class="text-[12px] ml-[1px]">00</span> -->
             </div>
           </div>
           <div class="flex gap-2 w-full mt-4">
@@ -82,8 +81,8 @@
                   <button class="w-full px-[15px] h-full bg-accent p-1 rounded-full text-primary" type="submit">+</button>
               </form>
               </div>
-{#                      if no products avaliable in cart#}
-                      {% else %}
+{#if no products available in cart#}
+                  {% else %}
                        <form class="w-full" method="POST" action="/products/#{{ item.product_id }}">
                   {% csrf_token %}
                   	<input type="text" value="{{ item.product_id }}" class="hidden" name="productID"/>
@@ -92,21 +91,12 @@
                   </button>
               </form>
                   {% endif %}
-
-            <!-- <button class="bg-secondary p-2 rounded-full">
-              <img
-                src="../../static/assets/heart.svg"
-                alt=""
-                class="mix-blend-overlay"
-              />
-            </button> -->
           </div>
         </div>
-        </a>
             {% empty %} No relevant data found
         {% endfor %}
       </div>
-    </div>
+
 
     <script>
       const filterByPrice = document.getElementById('filter-by-price');

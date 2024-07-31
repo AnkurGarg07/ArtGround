@@ -30,6 +30,6 @@ urlpatterns = [
                   path("__reload__/", include("django_browser_reload.urls")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-admin.site.site_header = 'ArtGround Admin'
-admin.site.site_title = 'ArtGround Admin'
-admin.site.index_title = 'ArtGround Admin'
+# admin.site.site_header = ' Admin'
+# admin.site.site_title = 'ArtGround Admin'
+# admin.site.index_title = 'ArtGround Admin'
