@@ -10,7 +10,7 @@ from reportlab.lib.colors import HexColor, black
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from Customer.models import shippingInfo, couponInfo
+from Customer.models import shippingInfo, couponInfo, productReview
 from Account.decorators import customer_required
 from Customer.forms import shippingForm, couponForm, reviewForm
 from Seller.models import Product, Order, OrderItem
@@ -127,7 +127,9 @@ def product_page(request, product_id):
         return redirect('product_page', product_id)
 
     product = Product.objects.get(product_id=product_id)
-    return render(request, 'ProductPage.html', {'product': product})
+    similar_products = Product.objects.filter(category=product.category).exclude(product_id=product_id)
+    reviews = productReview.objects.filter(product=product)
+    return render(request, 'ProductPage.html', {'product': product, 'similar_products': similar_products, 'reviews': reviews})
 
 
 @login_required()

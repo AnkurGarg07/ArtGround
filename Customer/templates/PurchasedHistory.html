@@ -1,5 +1,91 @@
-{% extends 'base.html' %} {% block content %}
-<div class="border-product">
+{% load static %} {% load static tailwind_tags %} {% load custom_filters %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Orders - ArtGround</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+
+.star-rating {
+    direction: rtl;
+    display: flex;
+    font-size: 2em;
+    gap: 3px;
+    justify-content: center;
+    margin: 0;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #ADB9D1;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #4A68A9;
+}
+
+.star-rating input:checked + label:hover,
+.star-rating input:checked ~ label:hover,
+.star-rating input:checked ~ label:hover ~ label,
+.star-rating label:hover ~ input:checked ~ label {
+    color: #4A68A9;
+}
+
+    </style>
+    {% tailwind_css %}
+</head>
+<body class="relative bg-primary px-[60px] w-[100vw] overflow-x-hidden font-[Montserrat]">
+   <!-- REVIEW POPUP -->
+<div class="absolute top-0 left-0 w-[100vw] h-[100vh] justify-center items-center bg-secondary bg-opacity-70 z-[99999999] overflow-hidden hidden" id="review-popup">
+  <div class="bg-primary relative flex flex-col gap-3 w-[500px]  p-10 m-auto rounded-lg justify-between items-center">
+    <button class="absolute top-6 right-6" id="review-close" onclick="closeReviewPopup()"><img src="https://media-public.canva.com/fQLyM/MAEnIMfQLyM/1/tl.png" alt="" class="size-4 opacity-50"></button>
+    <div class="flex">
+    <span class="mx-auto border-2 p-4 rounded-full bg-secondary">
+      <img src="https://media-public.canva.com/VPrNI/MADhb3VPrNI/2/tl.png" alt="" class="size-[60px] mix-blend-overlay">
+    </span>
+    </div>
+    <!-- <h1 class="font-semibold text-text text-lg">Give Rating to Product</h1> -->
+    <div class="star-rating">
+        <input type="radio" id="star5" name="star-rating" value="5" />
+        <label for="star5" onclick="setRating(5)">★</label>
+
+        <input type="radio" id="star4" name="star-rating" value="4" />
+        <label for="star4" onclick="setRating(4)">★</label>
+
+        <input type="radio" id="star3" name="star-rating" value="3" />
+        <label for="star3" onclick="setRating(3)">★</label>
+
+        <input type="radio" id="star2" name="star-rating" value="2" />
+        <label for="star2" onclick="setRating(2)">★</label>
+
+        <input type="radio" id="star1" name="star-rating" value="1" />
+        <label for="star1" onclick="setRating(1)">★</label>
+    </div>
+    <form class="grid grid-cols-1 w-full gap-3" action="">
+      {% render_field review.rating class="hidden" id="rating-form" %}
+      {% render_field review.review placeholder="Write Review" class="w-full row-span-1 col-span-1 h-[120px] outline-none border-none rounded-md  p-3 resize-none bg-slate-200" %}
+      <button id="submitReview" type="submit" class="bg-accent text-primary p-2 rounded-md font-medium">SUBMIT</button>
+    </form>
+  </div>
+</div>
+<!-- REVIEW POPUP END -->
+{% include 'navbar.html' %}
+  <div class="border-product">
   <h1 class="text-text text-2xl font-bold py-4">Purchased History</h1>
   <div class="w-full flex flex-col">
     <div class="h-[75vh] w-full overflow-y-auto">
@@ -11,12 +97,13 @@
             <th class="text-left">Product Name</th>
             <th>Date</th>
             <th>Price</th>
+            <th>Give Review</th>
           </tr>
         </thead>
         {% for order_item in purchase_history %}
         <tr class="text-center hover:bg-product border-b-2 font-[Montserrat]">
           <td class="w-[15%] text-left">{{order_item.order.order_id}}</td>
-          <td class="p-2 mx-auto w-[20%]">
+          <td class="p-2 mx-auto w-[15%]">
             <a
               href="/media/{{order_item.product.image}}"
               target="_blank"
@@ -29,13 +116,31 @@
               />
             </a>
           </td>
-          <td class="w-[30%] text-left">{{order_item.product.name}}</td>
+          <td class="w-[25%] text-left">{{order_item.product.name}}</td>
           <td class="w-[15%]">{{order_item.order.created_at}}</td>
           <td class="w-[15%]">₹{{order_item.product.price}}</td>
+          <td class="w-[20%]">
+            <button class="bg-accent text-primary py-1 px-3 rounded-md font-medium" onclick="openReviewPopup()">Review</button>
+          </td>
         </tr>
         {% endfor %}
       </table>
     </div>
   </div>
 </div>
-{% endblock %}
+
+<script>
+  function openReviewPopup(){
+    document.getElementById('review-popup').style.display = 'flex';
+    document.title = 'Review Product';
+  }
+  function closeReviewPopup(){
+    document.getElementById('review-popup').style.display = 'none';
+    document.title = 'Your Orders - ArtGround';
+  }
+  function setRating(rating){
+    document.getElementById('rating-form').value = rating;
+  }
+</script>
+</body>
+</html>
