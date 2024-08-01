@@ -10,9 +10,9 @@ from reportlab.lib.colors import HexColor, black
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from Customer.models import shippingInfo
+from Customer.models import shippingInfo, couponInfo
 from Account.decorators import customer_required
-from Customer.forms import shippingForm, couponForm
+from Customer.forms import shippingForm, couponForm, reviewForm
 from Seller.models import Product, Order, OrderItem
 import random
 
@@ -178,6 +178,8 @@ def about(request):
 def checkout(request):
     if request.method == 'POST':
         product_id = request.POST.get('productID')
+        coupon_code = request.GET.get('code')
+        print(coupon_code)
         if product_id:
             remove = request.POST.get('remove')
             cart = request.session.get('cart')
@@ -190,12 +192,25 @@ def checkout(request):
             else:
                 cart[product_id] = quantity + 1
             request.session['cart'] = cart
-            return redirect('checkout')
+            if coupon_code is None:
+                return redirect('checkout')
+            else:
+                return redirect(f'/checkout/?code={coupon_code}')
     form = shippingForm()
-    coupon=couponForm()
+    coupon_code = request.GET.get('code')
+    coupon_discount = 0
+    coupon_code_exists=None
+    if coupon_code:
+        coupon_code_exists = couponInfo.objects.filter(code__iexact=coupon_code).exists()
+        if coupon_code_exists:
+            coupon = couponInfo.objects.get(code__iexact=coupon_code)
+            coupon_discount = coupon.discount
+    coupon = couponForm()
     cart_products_list = list(request.session.get('cart').keys())
     cart_products = Product.objects.filter(product_id__in=cart_products_list)
-    return render(request, 'checkout.html', {'form': form, 'cart_products': cart_products,'coupon':coupon})
+    return render(request, 'checkout.html',
+                  {'form': form, 'cart_products': cart_products, 'coupon': coupon,
+                   'coupon_code_exists': coupon_code_exists, 'coupon_discount': coupon_discount})
 
 
 @login_required()
@@ -341,9 +356,10 @@ def generate_invoice(request, orderID):
 @login_required()
 @customer_required
 def OrdersHistory(request):
+    review=reviewForm()
     order_items = []
     current_user_orders = Order.objects.filter(user=request.user)
     for order in current_user_orders:
-        order_items = order.order_items.all()
+        order_items += order.order_items.all()
 
-    return render(request, 'PurchasedHistory.html', {'purchase_history': order_items})
+    return render(request, 'PurchasedHistory.html', {'purchase_history': order_items,'review':review})

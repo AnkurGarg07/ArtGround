@@ -103,7 +103,6 @@ def login_view(request, user_type):
                     # User type mismatch
                     messages.error(request, 'Invalid credentials for this login page.')
             else:
-                print("Authentication failed: Invalid credentials")
                 messages.error(request, 'Invalid Credentials')
         else:
             messages.error(request, 'Form invalid')

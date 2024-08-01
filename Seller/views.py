@@ -1,173 +1,21 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 
 from Account.decorators import seller_required
 from .forms import productForm
-from .models import Product
+from .models import Product, OrderItem
 
 
 # Create your views here.
 @login_required()
 @seller_required
 def sellerHome(request):
-    product_sales = [
-        {
-            'id': 1,
-            'image': "../../static/assets/products/product-1.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'sales': "325",
-        },
-        {
-            'id': 2,
-            'image': "../../static/assets/products/product-2.png",
-            'title': "Long Head Birds",
-            'price': "899",
-            'sales': "315",
-        },
-        {
-            'id': 3,
-            'image': "../../static/assets/products/product-3.png",
-            'title': "3D Flower Pot",
-            'price': "1299",
-            'sales': "65",
-        },
-        {
-            'id': 4,
-            'image': "../../static/assets/products/product-4.png",
-            'title': "The Horse Rider",
-            'price': "999",
-            'sales': "135",
-        },
-        {
-            'id': 5,
-            'image': "../../static/assets/products/product-1.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'sales': "353",
-        },
-        {
-            'id': 1,
-            'image': "../../static/assets/products/product-1.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'sales': "115",
-        },
-        {
-            'id': 2,
-            'image': "../../static/assets/products/product-2.png",
-            'title': "Long Head Birds",
-            'price': "899",
-            'sales': "325",
-        },
-        {
-            'id': 3,
-            'image': "../../static/assets/products/product-3.png",
-            'title': "3D Flower Pot",
-            'price': "1299",
-            'sales': "252",
-        },
-        {
-            'id': 4,
-            'image': "../../static/assets/products/product-4.png",
-            'title': "The Horse Rider",
-            'price': "999",
-            'sales': "332",
-        },
-        {
-            'id': 5,
-            'image': "../../static/assets/products/product-1.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'sales': "62",
-        },
-    ]
-
+    product_sales = OrderItem.objects.filter(product__seller=request.user.seller)
     return render(request, 'sellerHome.html', {'product_sales': product_sales})
-def TotalSales(request):
-    product_sales = [
-        {
-            'id': 1,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'sales': "325",
-        },
-        {
-            'id': 2,
-            'image': "http://127.0.0.1:8000/media/product_images/IMG-20240629-WA0010.jpg",
-            'title': "Long Head Birds",
-            'price': "899",
-            'date': "2021-09-12",
-            'sales': "315",
-        },
-        {
-            'id': 3,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "3D Flower Pot",
-            'price': "1299",
-            'date': "2021-09-12",
-            'sales': "65",
-        },
-        {
-            'id': 4,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "The Horse Rider",
-            'price': "999",
-            'date': "2021-09-12",
-            'sales': "135",
-        },
-        {
-            'id': 5,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'sales': "353",
-        },
-        {
-            'id': 1,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'sales': "115",
-        },
-        {
-            'id': 2,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Long Head Birds",
-            'price': "899",
-            'date': "2021-09-12",
-            'sales': "325",
-        },
-        {
-            'id': 3,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "3D Flower Pot",
-            'price': "1299",
-            'date': "2021-09-12",
-            'sales': "252",
-        },
-        {
-            'id': 4,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "The Horse Rider",
-            'price': "999",
-            'date': "2021-09-12",
-            'sales': "332",
-        },
-        {
-            'id': 5,
-            'image': "http://127.0.0.1:8000/media/product_images/product-2_RqrGpek.png",
-            'title': "Vintage Car",
-            'price': "449",
-            'date': "2021-09-12",
-            'sales': "62",
-        },
-    ]
 
+
+def TotalSales(request):
+    product_sales = OrderItem.objects.filter(product__seller=request.user.seller)
     return render(request, 'TotalSales.html', {'product_sales': product_sales})
 
 
@@ -196,7 +44,7 @@ def allProducts(request):
 @login_required()
 @seller_required
 def editProduct(request, productID):
-    product=get_object_or_404(Product,pk=productID,seller=request.user.seller)
+    product = get_object_or_404(Product, pk=productID, seller=request.user.seller)
     if request.method == 'POST':
         form = productForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
@@ -211,8 +59,8 @@ def editProduct(request, productID):
 
 @login_required()
 @seller_required
-def deleteProduct(request,productID):
-    product=get_object_or_404(Product,pk=productID,seller=request.user.seller)
+def deleteProduct(request, productID):
+    product = get_object_or_404(Product, pk=productID, seller=request.user.seller)
     if request.method == 'POST':
         product.delete()
         return redirect('allProducts')

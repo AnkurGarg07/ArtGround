@@ -23,7 +23,7 @@ def cart_quantity(item, cart):
 
 @register.filter(name="cart_total")
 def cart_total(cart):
-    return sum(cart.values())
+    return len(cart)
 
 
 @register.filter(name='product_total')
@@ -36,7 +36,7 @@ def get_cart_total(products, cart):
     sum = 0
     for product in products:
         sum += price_total(product, cart)
-    return sum
+    return float(sum)
 
 
 @register.filter(name='get_tax')
@@ -53,3 +53,20 @@ def get_total_price(products, cart):
     tax = get_tax(products, cart)
     total_price = cart_total + tax + 60.0
     return total_price
+
+
+@register.filter(name='get_total_price_discount')
+def get_total_price_discount(products, cart, discount):
+    total_price = get_cart_total(products, cart)
+    discounted_price = ((discount / 100) * total_price)
+    price_after_discount = total_price - discounted_price
+    return price_after_discount, discounted_price
+
+
+@register.simple_tag
+def get_total_price_discount_tag(products, cart, discount):
+    total_price = get_cart_total(products, cart)
+    total_value=get_total_price(products, cart)
+    discounted_price=((float(discount) / 100) * total_price)
+    price_after_discount = total_value - discounted_price
+    return price_after_discount,discounted_price

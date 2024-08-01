@@ -33,17 +33,19 @@
   <h1 class="font-bold text-[24px] text-text text-center">Best Sellers</h1>
   <div class="grid grid-cols-5 gap-4 my-6 pb-4">
     {% for item in best_products %}
-    <a href="/product/{{item.product_id}}">
+
       <div
         class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer"
         title="{{ item.description }}"
         id="{{ item.product_id }}"
       >
+      <a href="/product/{{item.product_id}}">
         <img
           src="/media/{{ item.image }}"
           alt=""
           class="w-full h-full object-cover rounded-xl aspect-square"
         />
+      </a>
         <div class="flex justify-between mt-2">
           <div class="flex flex-col">
             <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ item.name }}"
@@ -126,7 +128,6 @@
           {% endif %}
         </div>
       </div>
-    </a>
     {% empty %} No Best Sellers {% endfor %}
   </div>
 
@@ -139,17 +140,19 @@
   </h1>
   <div id="all-products" class="grid grid-cols-5 gap-4 my-6 pb-4">
     {% for item in all_products %}
-    <a href="/product/{{item.product_id}}">
+
       <div
         class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer"
         title="{{ item.description }}"
         id="{{ item.product_id }}"
       >
+      <a href="/product/{{item.product_id}}">
         <img
           src="/media/{{ item.image }}"
           alt=""
           class="w-full h-full object-cover rounded-xl aspect-square"
         />
+      </a>
         <div class="flex justify-between mt-2">
           <div class="flex flex-col">
             <span class="text-text font-semibold text-[18px] line-clamp-1" title="{{ item.name }}"
@@ -232,7 +235,6 @@
           {% endif %}
         </div>
       </div>
-    </a>
     {% empty %} No relevant data found {% endfor %}
   </div>
 </div>
@@ -272,7 +274,7 @@
     </li>
     <li>
       <a
-        href="/page={{ totalPages }}"
+        href="/?page={{ total_pages }}#allProducts"
         class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
         >Last</a
       >

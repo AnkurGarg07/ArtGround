@@ -1,7 +1,7 @@
 from django.db import models
 
 from Account.models import Customer
-from Seller.models import Order
+from Seller.models import Order, Product
 
 
 # Create your models here.
@@ -36,3 +36,21 @@ class couponInfo(models.Model):
 
     def __str__(self):
         return self.code
+
+
+class productReview(models.Model):
+    ratings = [
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE, default=None)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
+    review = models.TextField()
+    rating = models.IntegerField(choices=ratings, default=1)
+    date = models.DateTimeField(auto_now_add=False)
+
+    def __str__(self):
+        return self.product.name

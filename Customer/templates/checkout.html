@@ -27,13 +27,14 @@
     </span>
     </div>
     <h1 class="font-semibold text-text text-lg">Enter Coupon Code</h1>
-    <span class="grid grid-cols-1 w-full gap-3">
+    <form class="grid grid-cols-1 w-full gap-3">
       {% render_field coupon.code placeholder="Enter Coupon Code" class="uppercase w-full outline-none border-none rounded-md p-3 bg-slate-200" %}
-      <button id="applyCoupon" class="bg-accent text-primary p-2 rounded-md font-medium">APPLY</button>
-    </span>
+      <button id="applyCoupon" type="submit" class="bg-accent text-primary p-2 rounded-md font-medium">APPLY</button>
+    </form>
   </div>
 </div>
-{% include 'navbar.html' %}
+<!-- COUPON POPUP END -->
+  {% include 'navbar.html' %}
 <div class="flex justify-center w-full items-center">
 
   <div class="w-[60%] bg-product p-[20px] h-[100vh]">
@@ -136,31 +137,36 @@
        <div class="flex flex-col gap-[10px]">
         <!-- cart product start -->
             {% for cart_product in cart_products %}
-                 <a href="/product/{{cart_product.product_id}}">
+
             <div class="flex items-center h-fit w-full bg-primary px-4 py-2 rounded-md">
+            <a href="/product/{{cart_product.product_id}}">
             <img src="/media/{{ cart_product.image }}" alt=""
             class="size-[70px] rounded-md">
+               </a>
+                <a href="/product/{{cart_product.product_id}}">
             <div class="flex flex-col ml-5">
                 <span class="text-text text-[20px] font-semibold"> {{ cart_product.name }}</span>
                 <span class="text-secondary text-[12px]">{{ cart_product.seller }}</span>
                 <span class="text-accent text-[20px] font-bold">₹ {{ cart_product.price }}</span>
             </div>
+                </a>
+
             <div class="flex justify-around items-center font-extrabold  ml-auto mt-auto text-[15px] bg-secondary rounded-md">
-                 <form method="post" class="flex justify-center px-3">
+                 <form method="post" class="flex justify-center w-[2rem]">
                     {% csrf_token %}
                     <input type="text" value="{{ cart_product.product_id }}" class="hidden" name="productID"/>
                      <input type="text" value="True" class="hidden" name="remove"/>
                     <button type="submit" class="w-full text-accent text-[20px] cursor-pointer">-</button>
                 </form >
                 <span class="bg-primary py-2 px-3 rounded-sm text-text cursor-not-allowed">{{ cart_product|cart_quantity:request.session.cart }}</span>
-                <form method="post" class="flex justify-center px-3">
+                <form method="post" class="flex justify-center w-[2rem]">
                     {% csrf_token %}
                     <input type="text" value="{{ cart_product.product_id }}" class="hidden" name="productID"/>
                     <button type="submit" class="w-full text-accent text-[20px] cursor-pointer">+</button>
                 </form>
             </div>
         </div>
-                 </a>
+
             {% empty %}
             <div class="flex flex-col justify-center items-center gap-4">
               <img src="https://media-public.canva.com/56ar4/MAEcWd56ar4/1/tl.png" alt="" class="size-[120px] mix-blend-overlay rotate-[-12deg]">
@@ -187,13 +193,41 @@
 
                 <span class="text-[#D92020]">₹ {{ cart_products|get_tax:request.session.cart }}</span>
             </span>
-            <span class="text-accent flex justify-end w-full">
-              <button class="ml-auto pt-1" id="coupon-btn">Have a Coupon Code?</button>
+            {% if coupon_code_exists %}
+                <span class="flex justify-between">
+                <span id="coupon-btn" class="cursor-pointer">Discount
+                    <span id="coupon_code_text" class="text-green-500"></span>
+                </span>
+
+                <span class="text-green-500">-
+                    {% get_total_price_discount_tag cart_products request.session.cart coupon_discount as prices%}
+                    ₹ {{ prices.1 }} ({{ coupon_discount|stringformat:"d" }}%)
+                </span>
             </span>
+                {% elif coupon_code_exists == False %}
+                <span class="flex justify-center">
+                <span class="text-red-500">Invalid coupon</span>
+                </span>
+                <span class="text-accent flex justify-end w-full">
+              <button class="ml-auto pt-1" id="coupon-btn">Have a coupon code?</button>
+            </span>
+                {% endif %}
+                {% if coupon_code_exists == None %}
+                <span class="text-accent flex justify-end w-full">
+              <button class="ml-auto pt-1" id="coupon-btn">Have a coupon code?</button>
+            </span>
+            {% endif %}
         </div>
         <div class="grid grid-cols-2 bg-text text-primary justify-center items-center p-[15px] rounded-lg">
             <div class="flex flex-col justify-center">
-                <span class="font-semibold">₹ {{ cart_products|get_total:request.session.cart }}</span>
+                <span class="font-semibold">₹
+                {% if coupon_code_exists %}
+                    {% get_total_price_discount_tag cart_products request.session.cart coupon_discount as prices%}
+                    {{ prices.0 }}
+                    {% else %}
+                    {{ cart_products|get_total:request.session.cart }}
+                    {% endif %}
+                </span>
                 <span class="text-sm">inclusive of all taxes</span>
             </div>
             <button class="bg-primary h-full text-text rounded-md font-bold " id="buyNowButton">
@@ -304,6 +338,14 @@ document.getElementById('coupon-close').addEventListener('click', function(){
   document.getElementById('checkout-body').style.overflowY = 'auto';
   document.getElementById('coupon-popup').style.display = 'none';
 });
+
+coupon_code_text=document.getElementById('coupon_code_text');
+window.addEventListener('DOMContentLoaded', (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const coupon_code = urlParams.get('code');
+        if(coupon_code) coupon_code_text.innerHTML="("+coupon_code+")"
+      });
+
 
 </script>
 </body>

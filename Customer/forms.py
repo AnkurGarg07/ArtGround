@@ -1,5 +1,5 @@
 from django import forms
-from .models import shippingInfo, couponInfo
+from .models import shippingInfo, couponInfo, productReview
 
 
 class shippingForm(forms.ModelForm):
@@ -16,3 +16,9 @@ class couponForm(forms.ModelForm):
     class Meta:
         model = couponInfo
         fields = ['code']
+
+
+class reviewForm(forms.ModelForm):
+    class Meta:
+        model = productReview
+        fields = ['review', 'rating']
