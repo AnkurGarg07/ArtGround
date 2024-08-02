@@ -60,13 +60,18 @@ def get_total_price_discount(products, cart, discount):
     total_price = get_cart_total(products, cart)
     discounted_price = ((discount / 100) * total_price)
     price_after_discount = total_price - discounted_price
-    return price_after_discount, discounted_price
+    return price_after_discount, round(discounted_price, 2)
 
 
 @register.simple_tag
 def get_total_price_discount_tag(products, cart, discount):
     total_price = get_cart_total(products, cart)
-    total_value=get_total_price(products, cart)
-    discounted_price=((float(discount) / 100) * total_price)
+    total_value = get_total_price(products, cart)
+    discounted_price = ((float(discount) / 100) * total_price)
     price_after_discount = total_value - discounted_price
-    return price_after_discount,discounted_price
+    return price_after_discount, round(discounted_price, 2)
+
+
+@register.filter(name='star_range')
+def star_range(value):
+    return range(value)

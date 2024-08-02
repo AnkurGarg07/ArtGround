@@ -25,10 +25,9 @@
           class="w-[80%] mx-auto rounded-lg aspect-square object-cover"
         />
         <span
-          class="absolute top-[60px] flex gap-1 right-[120px] bg-accent text-primary text-lg font-semibold rounded-lg py-2 px-4 bg-opacity-80 backdrop-blur-lg"
-          >4.2 ★
-          </span
-        >
+          class="absolute top-[60px] flex gap-1 right-[120px] border-primary border-[2px] text-primary text-lg font-semibold rounded-lg py-2 px-4 bg-opacity-40 backdrop-blur-lg"
+          >{{ product.rating }} ★
+          </span>
       </div>
       <div class="border-l-4 border-secondary p-10 px-20 flex flex-col gap-2">
         <h1 class="text-[35px] text-text font-bold">{{product.name}}</h1>
@@ -122,41 +121,23 @@
       Product Reviews
     </h1>
     <div class="grid grid-cols-3 gap-5 mb-10">
-      <div
-        class="flex flex-col bg-primary border-2 border-accent p-4 w-full rounded-xl"
-      >
-        <span class="text-accent text-xl font-semibold">Koi Bhi</span>
-        <span class="text-3xl text-accent">★★★</span>
-        <span class="w-full line-clamp-3 my-2 text-text font-medium" title="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas iste
-          harum dolores, atque repellendus inventore explicabo deserunt aliquid
-          vero similique?
+        {% for review in reviews %}
+        	<div class="flex flex-col bg-primary border-2 border-accent p-4 w-full rounded-xl">
+        <span class="text-accent text-xl font-semibold">{{ review.user }}</span>
+        <span class="text-3xl text-accent">
+            {% for _ in review.rating|star_range %}
+                <span class="star">★</span>
+            {% endfor %}
         </span>
-        <span class="text-sm text-accent font-medium">July 31, 2024</span>
-      </div><div
-        class="flex flex-col bg-primary border-2 border-accent p-4 w-full rounded-xl"
-      >
-        <span class="text-accent text-xl font-semibold">Koi Bhi</span>
-        <span class="text-3xl text-accent">★★★</span>
         <span class="w-full line-clamp-3 my-2 text-text font-medium" title="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas iste
-          harum dolores, atque repellendus inventore explicabo deserunt aliquid
-          vero similique?
+         {{ review.review }}
         </span>
-        <span class="text-sm text-accent font-medium">July 31, 2024</span>
+        <span class="text-sm text-accent font-medium">{{ review.date|date:"D d M Y" }}</span>
       </div>
-      <div
-        class="flex flex-col bg-primary border-2 border-accent p-4 w-full rounded-xl"
-      >
-        <span class="text-accent text-xl font-semibold">Koi Bhi</span>
-        <span class="text-3xl text-accent">★★★</span>
-        <span class="w-full line-clamp-3 my-2 text-text font-medium" title="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas iste
-          harum dolores, atque repellendus inventore explicabo deserunt aliquid
-          vero similique?
-        </span>
-        <span class="text-sm text-accent font-medium">July 31, 2024</span>
-      </div>
+            {% empty %}
+            <p class="text-2xl font-Montserrat">No reviews available</p>
+        {% endfor %}
+
     </div>
     <div>
       <h1 class="font-bold text-center text-accent text-2xl mt-10 mb-5">
@@ -170,12 +151,16 @@
         title="{{ item.description }}"
         id="{{ item.product_id }}"
       >
-      <a href="/product/{{item.product_id}}">
+      <a href="/product/{{item.product_id}}" class="relative">
         <img
           src="/media/{{ item.image }}"
           alt=""
           class="w-full h-full object-cover rounded-xl aspect-square"
         />
+          <span
+          class="absolute top-[10px] flex gap-1 right-[10px] text-primary text-sm font-semibold border-primary border-[1px] rounded-md py-2 px-3 bg-opacity-[0.4] backdrop-blur-lg"
+          >{{ item.rating }} ★
+          </span>
       </a>
         <div class="flex justify-between mt-2">
           <div class="flex flex-col">
@@ -201,7 +186,7 @@
             <form
               method="POST"
               class="h-full text-[20px] bg-accent rounded-s-full text-primary"
-              action="/#{{ item.product_id }}"
+             action="product/{{ item.productID}}"
             >
               {% csrf_token %}
               <input
@@ -259,7 +244,7 @@
           {% endif %}
         </div>
       </div>
-    {% empty %} No Similar Products {% endfor %}
+    {% empty %} <p class="text-2xl font-Montserrat">No Similar products</p> {% endfor %}
   </div>
     </div>
   </body>

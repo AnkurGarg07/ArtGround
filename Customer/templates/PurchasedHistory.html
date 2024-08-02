@@ -76,7 +76,9 @@
         <input type="radio" id="star1" name="star-rating" value="1" />
         <label for="star1" onclick="setRating(1)">★</label>
     </div>
-    <form class="grid grid-cols-1 w-full gap-3" action="">
+    <form class="grid grid-cols-1 w-full gap-3" action="" method="post">
+        {% csrf_token %}
+        <input type="text" class="hidden" value="" id="order_item_id" name="productID" />
       {% render_field review.rating class="hidden" id="rating-form" %}
       {% render_field review.review placeholder="Write Review" class="w-full row-span-1 col-span-1 h-[120px] outline-none border-none rounded-md  p-3 resize-none bg-slate-200" %}
       <button id="submitReview" type="submit" class="bg-accent text-primary p-2 rounded-md font-medium">SUBMIT</button>
@@ -120,7 +122,7 @@
           <td class="w-[15%]">{{order_item.order.created_at}}</td>
           <td class="w-[15%]">₹{{order_item.product.price}}</td>
           <td class="w-[20%]">
-            <button class="bg-accent text-primary py-1 px-3 rounded-md font-medium" onclick="openReviewPopup()">Review</button>
+            <button class="bg-accent text-primary py-1 px-3 rounded-md font-medium" onclick="openReviewPopup('{{order_item.product.product_id}}')">Review</button>
           </td>
         </tr>
         {% endfor %}
@@ -130,8 +132,9 @@
 </div>
 
 <script>
-  function openReviewPopup(){
+  function openReviewPopup(order_item_id){
     document.getElementById('review-popup').style.display = 'flex';
+    document.getElementById('order_item_id').value = order_item_id;
     document.title = 'Review Product';
   }
   function closeReviewPopup(){

@@ -40,6 +40,7 @@ class Product(models.Model):
     size = models.CharField(max_length=6, choices=SIZE_CHOICES, default='null')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    rating = models.DecimalField(max_digits=5,decimal_places=1, default=1.0)
 
     def __str__(self):
         return self.name
@@ -50,6 +51,7 @@ class Order(models.Model):
         if not self.order_id:
             self.order_id = generate(size=10)
         super().save(*args, **kwargs)
+
     order_id = models.CharField(primary_key=True, max_length=10, unique=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -64,6 +66,7 @@ class OrderItem(models.Model):
         if not self.order_item_id:
             self.order_item_id = generate(size=10)
         super().save(*args, **kwargs)
+
     order_item_id = models.CharField(primary_key=True, max_length=10, unique=True, editable=False)
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

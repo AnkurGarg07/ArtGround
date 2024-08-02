@@ -14,7 +14,7 @@ from Customer.models import shippingInfo, couponInfo, productReview
 from Account.decorators import customer_required
 from Customer.forms import shippingForm, couponForm, reviewForm
 from Seller.models import Product, Order, OrderItem
-import random
+from django.db.models import Avg
 
 
 @login_required()
@@ -45,7 +45,7 @@ def home(request):
     else:
         all_products = Product.objects.all()
         best_products_limit = min(5, len(all_products))
-        best_products = Product.objects.all()[:5]
+        best_products = Product.objects.all().order_by('-rating')[:best_products_limit]
         query = request.GET.get('query')
         if query:
             all_products = Product.objects.filter(name__icontains=query)
@@ -86,6 +86,7 @@ def products(request):
         query = request.GET.get('query')
         filter_price = request.GET.get('filter_price')
         filter_size = request.GET.get('filter_size')
+        filter_rating=request.GET.get('filter_rating')
         if query:
             all_products = Product.objects.filter(name__icontains=query)
         if filter_price and filter_price != 'all':
@@ -99,6 +100,10 @@ def products(request):
                 all_products = Product.objects.filter(price__gte=10000)
         if filter_size and filter_size != 'all':
             all_products = Product.objects.filter(size=filter_size)
+        if filter_rating and filter_rating != 'all':
+            lower_bound = int(filter_rating)
+            upper_bound = lower_bound + 1
+            all_products = Product.objects.filter(rating__gte=lower_bound, rating__lt=upper_bound)
         return render(request, 'products.html', {'all_products': all_products})
 
 
@@ -125,11 +130,11 @@ def product_page(request, product_id):
             cart[product_id] = 1
         request.session['cart'] = cart
         return redirect('product_page', product_id)
-
     product = Product.objects.get(product_id=product_id)
     similar_products = Product.objects.filter(category=product.category).exclude(product_id=product_id)
     reviews = productReview.objects.filter(product=product)
-    return render(request, 'ProductPage.html', {'product': product, 'similar_products': similar_products, 'reviews': reviews})
+    return render(request, 'ProductPage.html',
+                  {'product': product, 'similar_products': similar_products, 'reviews': reviews})
 
 
 @login_required()
@@ -201,7 +206,7 @@ def checkout(request):
     form = shippingForm()
     coupon_code = request.GET.get('code')
     coupon_discount = 0
-    coupon_code_exists=None
+    coupon_code_exists = None
     if coupon_code:
         coupon_code_exists = couponInfo.objects.filter(code__iexact=coupon_code).exists()
         if coupon_code_exists:
@@ -358,10 +363,24 @@ def generate_invoice(request, orderID):
 @login_required()
 @customer_required
 def OrdersHistory(request):
-    review=reviewForm()
+    if request.method == 'POST':
+        form = reviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            productID = request.POST.get('productID')
+            review.user = request.user.customer
+            product = Product.objects.get(product_id=productID)
+            review.product = product
+            review.save()
+            average_rating = productReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
+            if average_rating is not None:
+                product.rating = average_rating
+                product.save()
+            return redirect('Orders')
+    review = reviewForm()
     order_items = []
     current_user_orders = Order.objects.filter(user=request.user)
     for order in current_user_orders:
         order_items += order.order_items.all()
 
-    return render(request, 'PurchasedHistory.html', {'purchase_history': order_items,'review':review})
+    return render(request, 'PurchasedHistory.html', {'purchase_history': order_items, 'review': review})

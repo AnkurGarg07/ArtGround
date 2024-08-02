@@ -3,7 +3,7 @@
 {% block content %}
     {% load custom_filters %}
 	 <h1 class="font-bold text-[24px] text-text  text-center pt-6">All Products</h1>
-   <div class="grid grid-cols-[3fr_1fr] w-full gap-4 justify-center items-center mt-6">
+   <div class="grid grid-cols-[3fr_2fr] w-full gap-4 justify-center items-center mt-6">
       <form>
        <span
           class="flex bg-primary h-[60px]  rounded-lg items-center pl-4 border-solid border-[1px]"
@@ -21,7 +21,7 @@
           </span>
         </span>
         </form>
-        <div class="grid grid-cols-2 gap-2 h-full w-full">
+        <div class="grid grid-cols-3 gap-2 h-full w-full">
           <form action="" id="price-form" >
           <select name="filter_price" id="filter-by-price" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
             <option value="all">By Price</option>
@@ -40,14 +40,28 @@
             <option value="24x30">24x30</option>
           </select>
           </form>
+            <form action="" id="rating-form" >
+          <select name="filter_rating" id="filter-by-rating" class="h-full border-2 w-full border-accent text-accent outline-none rounded-md cursor-pointer">
+            <option value="all">By Rating</option>
+            <option value="1">★</option>
+            <option value="2">★★</option>
+            <option value="3">★★★</option>
+            <option value="4">★★★★</option>
+              <option value="5">★★★★★</option>
+          </select>
+          </form>
         </div>
       </div>
       <div class="grid grid-cols-5 gap-4 my-6 pb-4">
         {% for item in all_products %}
 
         <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer" title="{{ item.description }}" id="{{ item.product_id }}">
-          <a href="/product/{{item.product_id}}">
+          <a href="/product/{{item.product_id}} " class="relative">
             <img src="/media/{{ item.image }}" alt="" class="w-full h-full object-cover rounded-xl aspect-square" />
+              <span
+          class="absolute top-[10px] flex gap-1 right-[10px] text-primary text-sm font-semibold border-primary border-[1px] rounded-md py-2 px-3 bg-opacity-[0.4] backdrop-blur-lg"
+          >{{ item.rating }} ★
+          </span>
           </a>
           <div class="flex justify-between mt-2">
             <div class="flex flex-col">
@@ -101,6 +115,7 @@
     <script>
       const filterByPrice = document.getElementById('filter-by-price');
       const filterBySize = document.getElementById('filter-by-size');
+      const filterByRating=document.getElementById('filter-by-rating')
       filterByPrice.addEventListener('change', (e) => {
         e.preventDefault();
         document.getElementById('price-form').submit();
@@ -109,13 +124,19 @@
         e.preventDefault();
         document.getElementById('size-form').submit();
       });
+      filterByRating.addEventListener('change',(e)=>{
+          e.preventDefault()
+          document.getElementById('rating-form').submit();
+      })
 
       window.addEventListener('DOMContentLoaded', (event) => {
         const urlParams = new URLSearchParams(window.location.search);
         const price = urlParams.get('filter_price');
         const size = urlParams.get('filter_size');
+        const rating=urlParams.get('filter_rating')
         if(price) filterByPrice.value = price;
         if(size) filterBySize.value = size;
+        if(rating) filterByRating.value=rating;
       });
     </script>
 {% endblock %}
