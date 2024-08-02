@@ -18,4 +18,5 @@ def total_products_sold(product_sales):
 
 @register.filter(name='total_revenue_generated')
 def total_revenue_generated(product_sales):
-    return sum(product.price for product in product_sales)
+    revenue = str(round(sum(product.price for product in product_sales)/1000, 1)) + "K"
+    return revenue

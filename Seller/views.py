@@ -10,7 +10,7 @@ from .models import Product, OrderItem
 @login_required()
 @seller_required
 def sellerHome(request):
-    product_sales = OrderItem.objects.filter(product__seller=request.user.seller)
+    product_sales = OrderItem.objects.filter(product__seller=request.user.seller)[:10]
     return render(request, 'sellerHome.html', {'product_sales': product_sales})
 
 

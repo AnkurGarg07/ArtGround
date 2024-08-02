@@ -56,7 +56,7 @@ def home(request):
         all_products_data = paginator.get_page(page_num)
         totalPages = all_products_data.paginator.num_pages
         data = {'best_products': best_products, 'all_products': all_products_data, 'total_pages': totalPages,
-                'current_page': page_num}
+                'current_page': page_num, 'title': "ArtGround - Digital Auction"}
         return render(request, "home.html", data)
 
 
@@ -104,7 +104,7 @@ def products(request):
             lower_bound = int(filter_rating)
             upper_bound = lower_bound + 1
             all_products = Product.objects.filter(rating__gte=lower_bound, rating__lt=upper_bound)
-        return render(request, 'products.html', {'all_products': all_products})
+        return render(request, 'products.html', {'all_products': all_products, 'title': "All Products"})
 
 
 @login_required()
@@ -171,13 +171,13 @@ def category(request):
         painting_category = {"oil": oil_painting, "acrylic": acrylic_painting, "water": water_painting,
                              "pastel": pastel_painting, "spray": spray_painting, "other": other}
 
-        return render(request, 'category.html', {'painting_category': painting_category})
+        return render(request, 'category.html', {'painting_category': painting_category, "title": "Category Products"})
 
 
 @login_required()
 @customer_required
 def about(request):
-    return render(request, 'about.html')
+    return render(request, 'about.html', {"title": "About Us"})
 
 
 @login_required()

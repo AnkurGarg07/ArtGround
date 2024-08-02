@@ -11,26 +11,26 @@
       <li><a href="{% url 'allProducts' %}">All Products</a></li>
       <li><a href="{% url 'TotalSales' %}">Sales</a></li>
       <li>
-        <a class="bg-accent text-primary py-2 px-6 rounded-full" href="{% url 'addProducts' %}"
+        <a class="bg-accent text-primary py-3 px-7 rounded-full" href="{% url 'addProducts' %}"
           >+ Add Product</a
         >
       </li>
 
       <li
-        class="bg-text text-primary py-2 px-[10px] rounded-full flex justify-center items-center"
+        class="bg-text text-primary py-3 px-[13px] rounded-full flex justify-center items-center"
       >
         <a class="" href=""
           ><img src="{% static 'assets/user-icon.png' %}" alt="" class="w-4"
         /></a>
       </li>
       <li
-        class="bg-secondary text-primary p-2 rounded-full flex justify-center items-center"
+        class="bg-secondary text-primary p-3 rounded-full flex justify-center items-center"
       >
         <a class="sellerLogout" href="{% url 'logout_seller' %}">
         <img
             src="{% static 'assets/logout-icon.png' %}"
             alt=""
-            class="mix-blend-overlay size-6"
+            class="mix-blend-overlay size-5"
         /></a>
       </li>
     </ul>

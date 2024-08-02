@@ -37,20 +37,20 @@
             >
               <td class="p-2 mx-auto w-[20%]">
                 <a
-                  href="{{product.product.image}}"
+                  href="/media/{{product.product.image}}"
                   target="_blank"
                   onclick="window.open(this.href, 'Snopzer','left=50,top=50,width=500,height=500,toolbar=1,resizable=0'); return false;"
                 >
                   <img
                     src="/media/{{product.product.image}}"
                     alt=""
-                    class="size-[60px] rounded-sm"
+                    class="size-[60px] rounded-sm object-cover aspect-square"
                   />
                 </a>
               </td>
               <td class="w-[30%] text-left">{{product.product.name}}</td>
-              <td class="w-[15%]">{{product.order.created_at}}</td>
-              <td class="w-[15%]">₹{{product.product.price}}</td>
+              <td class="w-[15%] text-left pl-8">{{product.order.created_at}}</td>
+              <td class="w-[15%] text-left pl-[70px]">₹{{product.product.price}}</td>
               <td class="w-[15%]">{{product.quantity}}</td>
             </tr>
             {% endfor %}

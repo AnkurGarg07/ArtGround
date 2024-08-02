@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    <title>My Products</title>
     {% tailwind_css %}
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
@@ -22,11 +22,17 @@
     <div class="grid grid-cols-5 gap-4 my-6 pb-4">
       {% for item in products %}
       <div class="flex flex-col bg-product p-4 rounded-[20px] cursor-pointer">
+        <div class="relative">
         <img
           src="/media/{{item.image}}"
           alt=""
           class="w-full h-full object-cover rounded-xl aspect-square"
         />
+        <span
+          class="absolute top-[10px] flex gap-1 right-[10px] text-primary text-sm font-semibold border-primary border-[1px] rounded-md py-2 px-3 bg-opacity-[0.4] backdrop-blur-lg"
+          >{{ item.rating }} ★
+          </span>
+        </div>
         <div class="flex justify-between mt-2">
           <div class="flex flex-col">
             <span
