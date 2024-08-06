@@ -99,6 +99,7 @@
             <th class="text-left">Product Name</th>
             <th>Date</th>
             <th>Price</th>
+              <th>Status</th>
             <th>Give Review</th>
           </tr>
         </thead>
@@ -117,10 +118,20 @@
                 class="size-[60px] rounded-sm object-cover aspect-square"
               />
             </a>
+
           </td>
           <td class="w-[25%] text-left">{{order_item.product.name}}</td>
           <td class="w-[15%]">{{order_item.order.created_at}}</td>
-          <td class="w-[15%]">₹{{order_item.product.price}}</td>
+          <td class="w-[10%]">₹{{order_item.product.price}}</td>
+            <td class="w-[10%] font-bold"
+                 {% if order_item.status == 'accepted' %}
+                    style="color: green;"
+                 {% elif order_item.status == 'rejected' %}
+                    style="color: red;"
+    {% endif %}
+            >
+                {{order_item.status|capfirst}}
+            </td>
           <td class="w-[20%]">
             <button class="bg-accent text-primary py-1 px-3 rounded-md font-medium" onclick="openReviewPopup('{{order_item.product.product_id}}')">Review</button>
           </td>
