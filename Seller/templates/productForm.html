@@ -4,7 +4,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Product</title>
+    <title>
+      {% if form.instance.pk %}
+        Edit product
+      {% else %}
+        Add product
+      {% endif %} 
+      - ArtGround
+    </title>
     {% tailwind_css %}
 </head>
 <body>

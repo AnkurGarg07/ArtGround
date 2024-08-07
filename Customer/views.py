@@ -56,7 +56,7 @@ def home(request):
         all_products_data = paginator.get_page(page_num)
         totalPages = all_products_data.paginator.num_pages
         data = {'best_products': best_products, 'all_products': all_products_data, 'total_pages': totalPages,
-                'current_page': page_num, 'title': "ArtGround - Digital Auction"}
+                'current_page': page_num, 'title': "Home"}
         return render(request, "home.html", data)
 
 

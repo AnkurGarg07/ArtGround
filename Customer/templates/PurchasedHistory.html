@@ -105,7 +105,7 @@
         </thead>
         {% for order_item in purchase_history %}
         <tr class="text-center hover:bg-product border-b-2 font-[Montserrat]">
-          <td class="w-[15%] text-left">{{order_item.order.order_id}}</td>
+          <td class="w-[10%] text-left">{{order_item.order.order_id}}</td>
           <td class="p-2 mx-auto w-[15%]">
             <a
               href="/media/{{order_item.product.image}}"
@@ -121,9 +121,9 @@
 
           </td>
           <td class="w-[25%] text-left">{{order_item.product.name}}</td>
-          <td class="w-[15%]">{{order_item.order.created_at}}</td>
-          <td class="w-[10%]">₹{{order_item.product.price}}</td>
-            <td class="w-[10%] font-bold"
+          <td class="w-[15%] text-left pl-5">{{order_item.order.created_at}}</td>
+          <td class="w-[10%] text-left pl-8">₹{{order_item.product.price}}</td>
+            <td class="w-[15%] font-semibold"
                  {% if order_item.status == 'accepted' %}
                     style="color: green;"
                  {% elif order_item.status == 'rejected' %}
@@ -151,6 +151,7 @@
   function closeReviewPopup(){
     document.getElementById('review-popup').style.display = 'none';
     document.title = 'Your Orders - ArtGround';
+    location.reload();
   }
   function setRating(rating){
     document.getElementById('rating-form').value = rating;
