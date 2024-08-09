@@ -14,6 +14,8 @@ def sellerHome(request):
     return render(request, 'sellerHome.html', {'product_sales': product_sales})
 
 
+@login_required()
+@seller_required
 def TotalSales(request):
     product_sales = OrderItem.objects.filter(product__seller=request.user.seller)
     return render(request, 'TotalSales.html', {'product_sales': product_sales})
@@ -35,7 +37,8 @@ def addProducts(request):
         form = productForm()
     return render(request, 'productForm.html', {'form': form})
 
-
+@login_required()
+@seller_required
 def allProducts(request):
     products = Product.objects.filter(seller=request.user.seller)
     return render(request, 'sellerProducts.html', {'products': products})

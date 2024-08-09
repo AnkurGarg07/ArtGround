@@ -60,6 +60,8 @@ def home(request):
         return render(request, "home.html", data)
 
 
+@login_required()
+@customer_required
 def products(request):
     if request.method == 'POST':
         product_id = request.POST.get('productID')
@@ -240,6 +242,8 @@ def orderConfirmation(request):
     return redirect('products')
 
 
+@login_required()
+@customer_required
 def generate_invoice(request, orderID):
     # Retrieve order and shipping info
     order = get_object_or_404(Order, pk=orderID)
