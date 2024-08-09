@@ -35,20 +35,9 @@
                   <div>
                       {% render_field form.password class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1] " placeholder="Password" %}
                   </div>
-                 <div class="flex items-center justify-between">
-                      <div class="flex items-start">
-                          <div class="flex items-center h-5">
-                            <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-secondary " >
-                          </div>
-                          <div class="ml-3 text-sm">
-                            <label for="remember" class="text-secondary">Remember me</label>
-                          </div>
-                      </div>
-                      <a href="" class="text-sm font-medium text-secondary hover:underline ">Forgot password?</a>
-                  </div>
                   <button type="submit" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[25px] text-md px-5 py-2.5 text-center bg-opacity-70 ">Login</button>
                   <p class="text-sm text-center text-text">
-                      Don’t have an account? 
+                      Don't have an account? 
                       <a href="{% if heading == 'Seller' %} {% url 'register_seller' %} {% else %}{% url 'register_customer' %}{% endif %}" class="font-medium text-primary-600 hover:underline text-accent  ">SignUp</a>
                   </p>
               <p class="text-sm text-center text-text">

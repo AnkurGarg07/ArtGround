@@ -47,12 +47,12 @@
         <div class="flex flex-col gap-2">
           <label for="name" class="font-semibold">First Name</label>
           {% render_field form.first_name id="first_name" class+="rounded-lg border-none bg-primary" placeholder="Enter first name" %}
-            <span class="text-red-500" id="first_name_error"></span>
+            <!-- <span class="text-red-500" id="first_name_error"></span> -->
         </div>
         <div class="flex flex-col gap-2">
             <label for="name" class="font-semibold">Last Name</label>
           {% render_field form.last_name id="last_name" class+="rounded-lg border-none" placeholder="Enter last name" %}
-            <span class="text-red-500" id="last_name_error"></span>
+            <!-- <span class="text-red-500" id="last_name_error"></span> -->
         </div>
       </div>
 
@@ -60,12 +60,12 @@
         <div class="flex flex-col gap-2">
           <label for="name" class="font-semibold">Email Address</label>
           {% render_field form.email id="email" class+="rounded-lg border-none" placeholder="abc@example.com" %}
-            <span class="text-red-500" id="email_error"></span>
+            <!-- <span class="text-red-500" id="email_error"></span> -->
         </div>
         <div class="flex flex-col gap-2">
             <label for="name" class="font-semibold">Phone Number</label>
           {% render_field form.phoneNumber id="phoneNumber" class+="rounded-lg border-none" placeholder="+91 9718xxxx38" %}
-            <span class="text-red-500" id="phoneNumber_error"></span>
+            <!-- <span class="text-red-500" id="phoneNumber_error"></span> -->
         </div>
       </div>
 
@@ -73,7 +73,7 @@
         <div class="flex flex-col gap-2">
           <label for="name" class="font-semibold">Shipping Address Line 1</label>
           {% render_field form.address1 id="address1" class+="rounded-lg border-none" placeholder="Address line 1" %}
-            <span class="text-red-500" id="address1_error"></span>
+            <!-- <span class="text-red-500" id="address1_error"></span> -->
         </div>
         <div class="flex flex-col gap-2">
             <label for="name" class="font-semibold">Shipping Address Line 2</label>
@@ -85,24 +85,24 @@
         <div class="flex flex-col gap-2">
           <label for="name" class="font-semibold">Country</label>
           {% render_field form.Country id="Country" class+="rounded-lg border-none" placeholder="Enter country name" %}
-            <span class="text-red-500" id="Country_error"></span>
+            <!-- <span class="text-red-500" id="Country_error"></span> -->
         </div>
         <div class="flex flex-col gap-2">
             <label for="name" class="font-semibold">Zip/Postal Code</label>
           {% render_field form.zipCode id="zipCode" class+="rounded-lg border-none bg-blue" placeholder="Enter zip/postal code" %}
-            <span class="text-red-500" id="zipCode_error"></span>
+            <!-- <span class="text-red-500" id="zipCode_error"></span> -->
         </div>
       </div>
       <div class="grid grid-cols-2 gap-4 mt-2">
         <div class="flex flex-col gap-2">
           <label for="name" class="font-semibold">State</label>
           {% render_field form.State id="State" class+="rounded-lg border-none" placeholder="Enter state name" %}
-            <span class="text-red-500" id="State_error"></span>
+            <!-- <span class="text-red-500" id="State_error"></span> -->
         </div>
         <div class="flex flex-col gap-2">
             <label for="name" class="font-semibold">City</label>
           {% render_field form.City id="City" class+="rounded-lg border-none" placeholder="Enter city name" %}
-             <span class="text-red-500" id="City_error"></span>
+             <!-- <span class="text-red-500" id="City_error"></span> -->
         </div>
       </div>
 
@@ -125,7 +125,7 @@
             </span>
         {% endfor %}
         </div>
-          <span class="text-red-500" id="paymentType_error"></span>
+          <!-- <span class="text-red-500" id="paymentType_error"></span> -->
       </div>
     </form>
   </div>
