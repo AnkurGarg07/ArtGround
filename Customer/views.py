@@ -181,6 +181,16 @@ def category(request):
 def about(request):
     return render(request, 'about.html', {"title": "About Us"})
 
+@login_required()
+@customer_required
+def privacy(request):
+    return render(request, 'privacy-policy.html', {"title": "Privacy Policy"})
+
+@login_required()
+@customer_required
+def terms_condition(request):
+    return render(request, 'terms_condition.html', {"title": "Terms & Condition"})
+
 
 @login_required()
 @customer_required
@@ -238,7 +248,7 @@ def orderConfirmation(request):
             shipping_info.order = order
             shipping_info.save()
             request.session['cart'] = {}
-            return render(request, 'orderConfirm.html', {'order_id': order.order_id})
+            return render(request, 'orderConfirm.html', {'order_id': order.order_id, 'title': "Order Confirmation"})
     return redirect('products')
 
 
