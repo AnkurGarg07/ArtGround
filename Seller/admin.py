@@ -14,7 +14,7 @@ def send_email(request, email_value, status, order):
             <td style="padding: 10px; text-align: left; display:grid; grid-template-columns: 3fr; width:100%;">
                 <p style="margin: 0; font-weight: bold;">{order.product.name}</p>
                 <p style="margin: 5px 0;">Order ID: {order.order_id}</p>
-                <p style="margin: 0;">Price: ${order.price}</p>
+                <p style="margin: 0;">Price: Rs. {order.price}</p>
             </td>
         </tr>
         """
