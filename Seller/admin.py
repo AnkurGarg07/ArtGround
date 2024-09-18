@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.contrib import messages
 from Seller import models
 import requests
+from ArtGround.vars import EMAIL_ID, EMAIL_PASSWORD, ENTERPRISE_KEY
 
 def send_email(request, email_value, status, order):
-    url = 'https://mail.dwine.me/api/v1/send-mail'
+    url = 'https://mail.dwine.me/api/v1/send-mail/enterprise'
 
     # Generate HTML for order items
     order_items_html = ''
@@ -20,11 +21,12 @@ def send_email(request, email_value, status, order):
         """
     
     payload = {
-        "authUser": "your_email",
-        "authPass": "your_app_password",
+        "authUser": EMAIL_ID,
+        "authPass": EMAIL_PASSWORD,
+        "EnterpriseKey": ENTERPRISE_KEY,
         "To": email_value,
         "FromName": "ArtGround",
-        "ReplyAddress": "your_email",
+        "ReplyAddress": EMAIL_ID,
         "Subject": f"Your Order has been {status}",
         "Body": f"""
         <table

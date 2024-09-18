@@ -79,17 +79,18 @@
         if(emailValue){
             RegisterForm.style.display = 'none';
             otpDiv.style.display = 'grid';
-            const res = await fetch('https://mail.dwine.me/api/v1/send-mail', {
+            const res = await fetch('https://mail.dwine.me/api/v1/send-mail/enterprise', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    authUser: "your_email",
-                    authPass: "your_app_password",
+                    authUser: "{{EMAIL_ID}}",
+                    authPass: "{{EMAIL_PASSWORD}}",
+                    EnterpriseKey: "{{ENTERPRISE_KEY}}",
                     To: emailValue,
                     FromName: "ArtGround",
-                    ReplyAddress: "your_email",
+                    ReplyAddress: "{{EMAIL_ID}}",
                     Subject: "Your OTP to Verify Email",
                     Body: `<table
                     style="

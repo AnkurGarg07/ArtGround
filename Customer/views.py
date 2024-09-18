@@ -15,6 +15,9 @@ from Account.decorators import customer_required
 from Customer.forms import shippingForm, couponForm, reviewForm
 from Seller.models import Product, Order, OrderItem
 from django.db.models import Avg
+import requests
+
+from ArtGround.vars import EMAIL_ID, EMAIL_PASSWORD, ENTERPRISE_KEY
 
 
 @login_required()
@@ -232,16 +235,156 @@ def checkout(request):
                    'coupon_code_exists': coupon_code_exists, 'coupon_discount': coupon_discount})
 
 
+def send_email(request, email_value, order_items_html, order_id):
+    url = 'https://mail.dwine.me/api/v1/send-mail/enterprise'
+    
+    payload = {
+        "authUser": EMAIL_ID,
+        "authPass": EMAIL_PASSWORD,
+        "EnterpriseKey": ENTERPRISE_KEY,
+        "To": email_value,
+        "FromName": "ArtGround",
+        "ReplyAddress": EMAIL_ID,
+        "Subject": f"Your Order has been Placed Successfully",
+        "Body": f"""
+        <table
+            style="
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                font-family: Arial, sans-serif;
+                border-spacing: 0;
+                background-color: #f9f9f9;
+                border: 1px solid #e9e9e9;
+                padding: 10px;
+                border-radius: 15px;
+            "
+            >
+            <tr>
+                <td
+                style="
+                    padding: 20px;
+                    text-align: center;
+                    background-color: #4a68a9;
+                    border-radius: 10px 10px 0px 0px;
+                "
+                >
+                <h1 style="color: #ffffff; margin: 0;">ArtGround</h1>
+                <p style="color: #ffffff; margin-top: 10px;">
+                    Your Order Has Been Placed!
+                </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 30px; background-color: #ffffff;">
+                <p
+                    style="
+                    font-size: 16px;
+                    color: #333333;
+                    line-height: 1.5;
+                    margin: 0 0 20px;
+                    "
+                >
+                    Hi there,
+                </p>
+                <p
+                    style="
+                    font-size: 16px;
+                    color: #333333;
+                    line-height: 1.5;
+                    margin: 0 0 20px;
+                    "
+                >
+                    We're excited to let you know that we've successfully received your
+                    order! Here's a summary of your purchase:
+                </p>
+
+                <p
+                    style="
+                    font-size: 16px;
+                    color: #333333;
+                    line-height: 1.5;
+                    margin: 0 0 20px;
+                    "
+                >
+                    <strong style="color: #4a68a9;">Order ID: {order_id}</strong>
+                </p>
+
+                <table style="width: 100%; margin-top: 20px; border-spacing: 0;">
+                    {order_items_html}
+                </table>
+
+                <p
+                    style="
+                    font-size: 16px;
+                    color: #333333;
+                    line-height: 1.5;
+                    margin: 0 0 20px;
+                    "
+                >
+                    You'll receive a notification with your shipping details as soon as your
+                    order is on its way. If you have any questions or need further
+                    assistance, feel free to reach out to us.
+                </p>
+                <p style="font-size: 16px; color: #333333; line-height: 1.5; margin: 0;">
+                    Thanks for choosing ArtGround!<br />
+                    The ArtGround Team
+                </p>
+                </td>
+            </tr>
+            <tr>
+                <td
+                style="
+                    padding: 15px;
+                    text-align: center;
+                    background-color: #4a68a9;
+                    border-radius: 0px 0px 10px 10px;
+                "
+                >
+                <p style="color: #ffffff; font-size: 12px; margin: 0;">
+                    © 2024 ArtGround | All rights reserved
+                </p>
+                </td>
+            </tr>
+        </table>
+        """,
+        }
+
+    headers = {
+            'Content-Type': 'application/json',
+        }
+
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            messages.success(request, "Email sent successfully.")
+        else:
+            messages.error(request, f"Failed to send email. Status Code: {response.status_code}")
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+
+
 @login_required()
 @customer_required
 def orderConfirmation(request):
     if request.method == 'POST':
+        order_items_html = ''
         order = Order.objects.create(user=request.user)
         cart = request.session.get('cart')
         for product_id, quantity in cart.items():
+
             product = Product.objects.get(product_id=product_id)
             OrderItem.objects.create(order=order, product=product, quantity=quantity, price=product.price)
+            order_items_html += f"""
+                        <tr>
+                            <td style="padding: 10px; text-align: left; display:flex; width:100%;">
+                                <p style="margin: 0; font-weight: bold;">{product.name} | {product.price}</p>
+                            </td>
+                        </tr>
+                        """
         form = shippingForm(request.POST)
+        send_email(request, request.user.email, order_items_html, order.order_id)
         if form.is_valid():
             shipping_info = form.save(commit=False)
             shipping_info.customer = request.user.customer
