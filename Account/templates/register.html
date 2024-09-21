@@ -27,7 +27,7 @@
                     {% endfor %}
                 </div>
               {% endif %}
-              <form class="space-y-4 md:space-y-6" method="POST" {% if heading == 'Seller' %}{% url 'register_seller' %}{% else %}{% url 'register_customer' %}{% endif %}>
+              <form class="space-y-4 md:space-y-6" method="POST" id="register-form" {% if heading == 'Seller' %}{% url 'register_seller' %}{% else %}{% url 'register_customer' %}{% endif %}>
               {% csrf_token %}
                   <div>
                       {% render_field profile_form.full_name class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1] " placeholder="Full name" %}
@@ -36,7 +36,7 @@
                       {% render_field profile_form.phone_number class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1] " placeholder="Phone" %}
                   </div>
                   <div>
-                      {% render_field user_form.email class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1]" placeholder="Email address" %}
+                      {% render_field user_form.email id="email" class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1]" placeholder="Email address" %}
                   </div>
                   <div>
                       {% render_field user_form.password1 class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1]" placeholder="Enter password" %}
@@ -44,7 +44,7 @@
                    <div>
                       {% render_field user_form.password2 class+="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1]" placeholder="Confirm password" %}
                   </div>
-                  <button type="submit" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[25px] text-md px-5 py-2.5 text-center bg-opacity-70 ">Register</button>
+                  <button id="send-otp" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[25px] text-md px-5 py-2.5 text-center bg-opacity-70 ">Register</button>
                   <p class="text-sm text-center text-text">
                       Already have an account? <a href="{% if heading == 'Seller' %} {% url 'login_seller' %} {% else %}{% url 'login_customer' %}{% endif %}" class="font-medium text-primary-600 hover:underline text-accent  ">Login here</a>
                   </p>
@@ -53,9 +53,164 @@
                      <a href="{% if heading == 'Seller' %} {% url 'register_customer' %} {% else %}{% url 'register_seller' %}{% endif %}" class="font-medium text-primary-600 hover:underline text-accent  ">Register</a>
                   </p>
               </form>
+              <div class="gap-4 hidden" id="otp-div">
+                <label for="otp" class="text-md font-semibold text-text">Enter OTP Sent To Your Email</label>
+                <input type="number" name="otp" id="otp" class="bg-[#ECEDEF] border border-gray-300 text-sm rounded-[10px] focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-[#ADB9D1]" placeholder="Enter OTP">
+                <button id="otp-verified" class="w-full bg-accent text-white focus:ring-4 focus:outline-none font-medium rounded-[25px] text-md px-5 py-2.5 text-center bg-opacity-70 ">Verify Account</button>
+              </div>
           </div>
       </div>
   </div>
 </div>
+
+<script>
+    const email = document.getElementById('email');
+    const otp = document.getElementById('otp');
+    const sendOtp = document.getElementById('send-otp');
+    const otpVerified = document.getElementById('otp-verified');
+    const RegisterForm = document.getElementById('register-form');
+    const otpDiv = document.getElementById('otp-div');
+    const OTP = Math.floor(100000 + Math.random() * 9000);
+
+    sendOtp.addEventListener('click', async (e)=>{
+        e.preventDefault();
+        const emailValue = email.value;
+        if(emailValue == "") return alert("Please fill all required fields");
+        if(emailValue){
+            RegisterForm.style.display = 'none';
+            otpDiv.style.display = 'grid';
+            const res = await fetch('https://mail.dwine.me/api/v1/send-mail/enterprise', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    authUser: "{{EMAIL_ID}}",
+                    authPass: "{{EMAIL_PASSWORD}}",
+                    EnterpriseKey: "{{ENTERPRISE_KEY}}",
+                    To: emailValue,
+                    FromName: "ArtGround",
+                    ReplyAddress: "{{EMAIL_ID}}",
+                    Subject: "Your OTP to Verify Email",
+                    Body: `<table
+                    style="
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        font-family: Arial, sans-serif;
+                        border-spacing: 0;
+                        background-color: #f9f9f9;
+                        border: 1px solid #e9e9e9;
+                        padding: 10px;
+                        border-radius: 15px;
+                    "
+                    >
+                    <tr>
+                        <td
+                        style="
+                            padding: 20px;
+                            text-align: center;
+                            background-color: #4a68a9;
+                            border-radius: 10px 10px 0px 0px;
+                        "
+                        >
+                        <h1 style="color: #ffffff; margin: 0;">ArtGround</h1>
+                        <p style="color: #ffffff; margin-top: 10px;">Verify Your Email</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 30px; background-color: #ffffff;">
+                        <p
+                            style="
+                            font-size: 16px;
+                            color: #333333;
+                            line-height: 1.5;
+                            margin: 0 0 20px;
+                            "
+                        >
+                            Hi there,
+                        </p>
+                        <p
+                            style="
+                            font-size: 16px;
+                            color: #333333;
+                            line-height: 1.5;
+                            margin: 0 0 20px;
+                            "
+                        >
+                            We received a request to verify your email address. Please use the
+                            following One-Time Password (OTP) to complete the verification process:
+                        </p>
+                        <div style="display: grid; justify-content: center;">
+                            <p
+                            style="
+                                font-size: 24px;
+                                width: fit-content;
+                                padding: 5px 15px;
+                                font-weight: bold;
+                                color: #4a68a9;
+                                text-align: center;
+                                margin: 0 0 20px;
+                                display: flex;
+                                background-color: #e9e9e9;
+                            "
+                            >
+                            ${OTP}
+                            </p>
+                        </div>
+                        <p
+                            style="
+                            font-size: 16px;
+                            color: #333333;
+                            line-height: 1.5;
+                            margin: 0 0 20px;
+                            "
+                        >
+                            This OTP will expire in 10 minutes. If you didn’t request this, please
+                            ignore this email.
+                        </p>
+                        <p style="font-size: 16px; color: #333333; line-height: 1.5; margin: 0;">
+                            Thanks,<br />
+                            ArtGround Team
+                        </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                        style="
+                            padding: 15px;
+                            text-align: center;
+                            background-color: #4a68a9;
+                            border-radius: 0px 0px 10px 10px;
+                        "
+                        >
+                        <p style="color: #ffffff; font-size: 12px; margin: 0;">
+                            © 2024 ArtGround | All rights reserved
+                        </p>
+                        </td>
+                    </tr>
+                    </table>
+                    `,
+                })
+            });
+            const data = await res.json();
+            alert(data.message || data.error);
+            console[res.ok ? "log" : "error"](data.message || data.error);
+        }
+    })
+
+    otpVerified.addEventListener('click', async (e)=>{
+        e.preventDefault();
+        const otpValue = otp.value;
+        if(otpValue == OTP){
+            RegisterForm.submit();
+        }else{
+            alert("Invalid OTP");
+        }
+    })
+
+
+</script>
+
 </body>
 </html>

@@ -7,6 +7,8 @@ from .decorators import redirect_if_logged_in
 from .forms import RegistrationForm, CustomerProfileForm, SellerProfileForm, CustomLoginForm
 from .models import Seller, Customer, User
 
+from ArtGround.vars import EMAIL_ID, EMAIL_PASSWORD, ENTERPRISE_KEY
+
 
 @redirect_if_logged_in
 def register(request, user_type):
@@ -57,7 +59,10 @@ def register(request, user_type):
     return render(request, 'register.html', {
         'user_form': user_form,
         'profile_form': profile_form,
-        'heading': heading
+        'heading': heading,
+        'EMAIL_ID': EMAIL_ID,
+        'EMAIL_PASSWORD': EMAIL_PASSWORD,
+        'ENTERPRISE_KEY': ENTERPRISE_KEY
     })
 
 

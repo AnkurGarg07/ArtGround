@@ -67,19 +67,27 @@ class OrderItem(models.Model):
             self.order_item_id = generate(size=10)
         super().save(*args, **kwargs)
 
-    Status_choices = [
-        ('rejected', 'rejected'),
-        ('accepted', 'accepted'),
-        ('packed', 'packed'),
-        ('shipped', 'shipped'),
-        ('delivered', 'delivered'),
-    ]
+    # Status_choices = [
+    #     ('rejected', 'rejected'),
+    #     ('accepted', 'accepted'),
+    #     ('packed', 'packed'),
+    #     ('shipped', 'shipped'),
+    #     ('delivered', 'delivered'),
+    # ]
+
+    class Status_choices(models.TextChoices):
+        REJECTED = 'rejected'
+        ACCEPTED = 'accepted'
+        PACKED = 'packed'
+        SHIPPED = 'shipped'
+        DELIVERED = 'delivered'
+
     order_item_id = models.CharField(primary_key=True, max_length=10, unique=True, editable=False)
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=10, choices=Status_choices, default='accepted')
+    status = models.CharField(max_length=10, choices=Status_choices.choices, default='accepted')
 
     def __str__(self):
         return f"{self.product.name} {self.order}"
